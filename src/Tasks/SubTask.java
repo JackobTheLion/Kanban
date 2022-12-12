@@ -1,19 +1,21 @@
 package Tasks;
 
-public class SubTask extends Task{
-    int idOfEpic; // id эпика, к которому принадлежит subtask
+import java.util.Objects;
 
-    public SubTask(String name, String description, int idOfEpic, int id) {
-        super(name, description, id);
-        this.idOfEpic = idOfEpic;
+public class SubTask extends Task {
+    private int epicId; // id эпика, к которому принадлежит subtask
+
+    public SubTask(String name, String description, int idOfEpic) {
+        super(name, description);
+        this.epicId = idOfEpic;
     }
 
-    public int getIdOfEpic(){
-        return idOfEpic;
+    public int getEpicId() {
+        return epicId;
     }
 
-    public void setIdOfEpic(int idOfEpic){
-        this.idOfEpic = idOfEpic;
+    public void setEpicId(int epicId) {
+        this.epicId = epicId;
     }
 
     @Override
@@ -26,11 +28,25 @@ public class SubTask extends Task{
         }
 
         return "SubTask{" +
-                "idOfEpic=" + idOfEpic +
+                "idOfEpic=" + epicId +
                 ", name='" + name + '\'' +
                 ", description.length='" + descriptionLength + '\'' +
                 ", id=" + id +
                 ", status='" + status + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        SubTask subTask = (SubTask) o;
+        return epicId == subTask.epicId;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), epicId);
     }
 }

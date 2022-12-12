@@ -1,75 +1,57 @@
-import Tasks.EpicTask;
+import Tasks.Epic;
 import Tasks.SubTask;
 import Tasks.Task;
+import Manager.TaskManager;
 
 public class Main {
 
     public static void main(String[] args) {
-        Manager manager = new Manager();
+        TaskManager taskManager = new TaskManager();
 
-        Task firstTask = manager.createTask("Выбросить мусор", "по пути в магазин взять мусор " +
-                "и выкинуть");
-        manager.addNewTask(firstTask);
+        taskManager.createTask(new Task("Вынести мусор", "по пути в магазин вынести мусор"));
+        taskManager.createTask(new Task("Помыть чашку", "Помыть чашку после кофе"));
 
-        Task secondTask = manager.createTask("Позвонить маме", "по пути в магазин набрать маму");
-        manager.addNewTask(secondTask);
+        taskManager.createEpic(new Epic("Написать проект по ТЗ 3", "написать код по ТЗ"));
+        taskManager.createSubTask(new SubTask("Внести исправления в соответствии с комментариями",
+                "изучить комментарии и внести соответствующие исправления в код", 3));
+        taskManager.createSubTask(new SubTask("Сдать работу по ТЗ 3",
+                "написать работу и сдать", 3));
 
-        EpicTask firstEpic = manager.createEpicTask("Написать проект по ТЗ 3", "написать код по ТЗ");
-        manager.addNewTask(firstEpic);
-        SubTask firstSubOfFirstEpic = manager.createSubTask("изучить ТЗ", "внимательно прочитать ТЗ", 3);
-        manager.addNewTask(firstSubOfFirstEpic);
-        SubTask secondSubOfFirstEpic = manager.createSubTask("написать код по ТЗ", "написать и протестировать " +
-                "код по ТЗ", 3);
-        manager.addNewTask(secondSubOfFirstEpic);
+        taskManager.createEpic(new Epic("Прибраться дома", "навести порядок в квартире"));
+        taskManager.createSubTask(new SubTask("Пропылесосить",
+                "Пропылесосить", 6));
 
-        EpicTask secondEpic = manager.createEpicTask("Прибраться дома", "навести дома порядок");
-        manager.addNewTask(secondEpic);
-        SubTask firstSubOfSecondEpic = manager.createSubTask("Пропылесосить", "взять пылесос и " +
-                "пропылесосить квартиру", 6);
-        manager.addNewTask(firstSubOfSecondEpic);
+        System.out.println("Печатаем задачи");
+        System.out.println(taskManager.getAllTasks());
+        System.out.println("____________");
 
-        System.out.println("______________________");
-        System.out.println("Печатаем все задачи");
-        System.out.println(manager.getListOfTasks(1));
-        System.out.println("______________________");
-        System.out.println("Печатаем все эпики");
-        System.out.println(manager.getListOfTasks(2));
-        System.out.println("______________________");
-        System.out.println("Печатаем все сабы");
-        System.out.println(manager.getListOfTasks(3));
-        System.out.println("______________________");
+        System.out.println("Печатаем эпики");
+        System.out.println(taskManager.getAllEpicTasks());
+        System.out.println("____________");
 
-        System.out.println("Меняем статусы.");
+        System.out.println("Печатаем сабтаски");
+        System.out.println(taskManager.getAllSubTasks());
+        System.out.println("____________");
+
+        System.out.println("Меняем статус задачи");
         System.out.println("... ... ...");
-        manager.updateTask(manager.createUpdatedTask("status", "DONE", 1));
-        manager.updateTask(manager.createUpdatedTask("status", "DONE", 4));
-        manager.updateTask(manager.createUpdatedTask("status", "DONE", 7));
-        System.out.println("Печатаем все задачи");
-        System.out.println(manager.getListOfTasks(1));
-        System.out.println("______________________");
-        System.out.println("Печатаем все эпики");
-        System.out.println(manager.getListOfTasks(2));
-        System.out.println("______________________");
-        System.out.println("Печатаем все сабы");
-        System.out.println(manager.getListOfTasks(3));
-        System.out.println("______________________");
+        taskManager.updateTask(taskManager.createUpdatedTask("status", "DONE", 1));
+        System.out.println(taskManager.getAllTasks());
+        System.out.println("____________");
 
-        System.out.println("Удаляем задачу");
+
+        System.out.println("Меняем статус подзадачи");
+        taskManager.updateSubtask(taskManager.createUpdatedSubTask("status", "DONE", 4));
+        taskManager.updateSubtask(taskManager.createUpdatedSubTask("status", "DONE", 7));
         System.out.println("... ... ...");
-        manager.deleteById(1);
-        System.out.println("Печатаем все задачи");
-        System.out.println(manager.getListOfTasks(1));
-        System.out.println("______________________");
+        System.out.println("Печатаем эпики");
+        System.out.println(taskManager.getAllEpicTasks());
+        System.out.println("____________");
 
-        System.out.println("Удаляем эпик");
-        System.out.println("... ... ...");
-        manager.deleteById(3);
-        System.out.println("Печатаем все эпики");
-        System.out.println(manager.getListOfTasks(2));
-        System.out.println("______________________");
-        System.out.println("Печатаем все сабы");
-        System.out.println(manager.getListOfTasks(3));
-        System.out.println("______________________");
-
+        System.out.println("Удаляем задачу и эпик");
+        taskManager.deleteTaskById(2);
+        taskManager.deleteEpicById(6);
+        System.out.println(taskManager.getAllTasks());
+        System.out.println(taskManager.getAllEpicTasks());
     }
 }

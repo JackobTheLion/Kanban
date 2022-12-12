@@ -1,15 +1,16 @@
 package Tasks;
 
-public class Task {
-    String name;
-    String description;
-    int id;
-    String status = "NEW"; //по умолчанию при создании задачи ее статус NEW
+import java.util.Objects;
 
-    public Task(String name, String description, int id) {
+public class Task {
+    protected String name;
+    protected String description;
+    protected int id;
+    protected String status = "NEW"; //по умолчанию при создании задачи ее статус NEW
+
+    public Task(String name, String description) {
         this.name = name;
         this.description = description;
-        this.id = id;
     }
 
     public void setId(int id) {
@@ -20,7 +21,7 @@ public class Task {
         return id;
     }
 
-    public void setStatus(String status){
+    public void setStatus(String status) {
         if (status.equals("NEW") || status.equals("IN_PROGRESS") || status.equals("DONE")) {
             this.status = status;
         } else {
@@ -63,5 +64,18 @@ public class Task {
                 ", id=" + id +
                 ", status='" + status + '\'' +
                 "}";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        return id == task.id && Objects.equals(name, task.name) && Objects.equals(description, task.description) && Objects.equals(status, task.status);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, description, id, status);
     }
 }

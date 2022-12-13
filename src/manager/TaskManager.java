@@ -1,8 +1,8 @@
-package Manager;
+package manager;
 
-import Tasks.Epic;
-import Tasks.SubTask;
-import Tasks.Task;
+import tasks.Epic;
+import tasks.SubTask;
+import tasks.Task;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,27 +15,15 @@ public class TaskManager {
     private int id = 0;
 
     public ArrayList<Task> getAllTasks() {
-        ArrayList<Task> result = new ArrayList<>();
-        for (Task task: tasks.values()) {
-            result.add(task);
-        }
-        return result;
+        return new ArrayList<>(tasks.values());
     }
 
     public ArrayList<Epic> getAllEpicTasks() {
-        ArrayList<Epic> result = new ArrayList<>();
-        for (Epic epic : epicTasks.values()) {
-            result.add(epic);
-        }
-        return result;
+        return new ArrayList<>(epicTasks.values());
     }
 
     public ArrayList<SubTask> getAllSubTasks() {
-        ArrayList<SubTask> result = new ArrayList<>();
-        for (SubTask subTask : subTasks.values()) {
-            result.add(subTask);
-        }
-        return result;
+        return new ArrayList<>(subTasks.values());
     }
 
     public Task getTaskById(int id) {
@@ -93,7 +81,7 @@ public class TaskManager {
         }
         SubTask subTask = subTasks.get(id);
         Epic epic = epicTasks.get(subTask.getEpicId());
-        epic.getSubTasksOfEpic().remove(Integer.valueOf(id));
+        epic.deleteSubTaskId(id);
         calcStatusOfEpic(epic.getId());
         subTasks.remove(id);
     }
@@ -131,99 +119,26 @@ public class TaskManager {
 
     public void updateEpic(Epic updatedEpic) {
         if (epicTasks.containsKey(updatedEpic.getId())) {
-            epicTasks.put(updatedEpic.getId(), (Epic) updatedEpic);
+            Epic savedEpic = epicTasks.get(updatedEpic.getId());
+            savedEpic.setName(updatedEpic.getName());
+            savedEpic.setDescription(updatedEpic.getDescription());
         } else {
             System.out.println("Невозможно обновить. ID " + updatedEpic.getId() + " не найден в эпиках");
         }
     }
 
     public void updateSubtask(SubTask updatedSubTask) {
+        if (!epicTasks.containsKey(updatedSubTask.getEpicId())) {
+            System.out.println("Не существует эпика, к которому относится сабтаск");
+            return;
+        }
         if (subTasks.containsKey(updatedSubTask.getId())) {
             subTasks.put(updatedSubTask.getId(), updatedSubTask);
             Epic epicOfUpdatedSub = epicTasks.get(updatedSubTask.getEpicId()); //достаем нужный эпик
-            epicOfUpdatedSub.getSubTasksOfEpic().add(updatedSubTask.getId()); //кладем в него обновленный саб
+            epicOfUpdatedSub.addSubTaskId(updatedSubTask.getId()); //кладем в него обновленный саб
             calcStatusOfEpic(epicOfUpdatedSub.getId());
         } else {
             System.out.println("Невозможно обновить. ID " + updatedSubTask.getId() + " не найден в сабтасках");
-        }
-    }
-
-
-    public Task createUpdatedTask(String fieldToUpdate, String newFieldValue, int idOfTaskToUpdate) {
-        if (tasks.containsKey(idOfTaskToUpdate)) {
-                Task taskToUpdate = tasks.get(idOfTaskToUpdate); //достаем обновляемый таск
-                Task updatedTask = new Task(taskToUpdate.getName(), taskToUpdate.getDescription()); //создаем новый таск
-                updatedTask.setStatus(taskToUpdate.getStatus()); //даем ему статус обновляемой задачи
-                updatedTask.setId(taskToUpdate.getId()); //присваиваем ему корректный ID
-                switch (fieldToUpdate) { //определяем, какое поле нужно изменить и меняем его
-                    case "name":
-                        updatedTask.setName(newFieldValue);
-                        break;
-                    case "description":
-                        updatedTask.setDescription(newFieldValue);
-                        break;
-                    case "status":
-                        updatedTask.setStatus(newFieldValue);
-                        break;
-                    default:
-                        System.out.println("Ошибка. Имя изменяемого поля указано неверно.");
-                        return null;
-                }
-                return updatedTask;
-        } else {
-            System.out.println("Задача с ID " + idOfTaskToUpdate + " не найдена");
-            return null;
-        }
-    }
-
-    public Epic createUpdatedEpic(String fieldToUpdate, String newFieldValue, int idOfTaskToUpdate) {
-        if (epicTasks.containsKey(idOfTaskToUpdate)) {
-            Epic epicToUpdate = epicTasks.get(idOfTaskToUpdate); // достаем обновляемый эпик
-            Epic updatedEpic = new Epic(epicToUpdate.getName(), epicToUpdate.getDescription());
-            updatedEpic.setId(epicToUpdate.getId());
-            updatedEpic.setSubTasksOfEpic(epicToUpdate.getSubTasksOfEpic());
-            switch (fieldToUpdate) {
-                case "name":
-                    updatedEpic.setName(newFieldValue);
-                    break;
-                case "description":
-                    updatedEpic.setDescription(newFieldValue);
-                    break;
-                default:
-                    System.out.println("Ошибка. Имя изменяемого поля указано неверно.");
-                    return null;
-            }
-            return updatedEpic;
-        } else {
-            System.out.println("Эпик с ID " + idOfTaskToUpdate + " не найден");
-            return null;
-        }
-    }
-
-    public SubTask createUpdatedSubTask (String fieldToUpdate, String newFieldValue, int idOfTaskToUpdate) {
-        if (subTasks.containsKey(idOfTaskToUpdate)) {
-            SubTask subToUpdate = subTasks.get(idOfTaskToUpdate);
-            SubTask updatedSub = new SubTask(subToUpdate.getName(),subToUpdate.getDescription(),
-                    subToUpdate.getEpicId());
-            updatedSub.setId(subToUpdate.getId());
-            switch (fieldToUpdate){
-                case "name":
-                    updatedSub.setName(newFieldValue);
-                    break;
-                case "description":
-                    updatedSub.setDescription(newFieldValue);
-                    break;
-                case "status":
-                    updatedSub.setStatus(newFieldValue);
-                    break;
-                default:
-                    System.out.println("Ошибка. Имя изменяемого поля указано неверно.");
-                    return null;
-            }
-            return updatedSub;
-        } else {
-            System.out.println(idOfTaskToUpdate + " не найден ни в списке subtask.");
-            return null;
         }
     }
 

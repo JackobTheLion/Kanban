@@ -1,7 +1,7 @@
-import Tasks.Epic;
-import Tasks.SubTask;
-import Tasks.Task;
-import Manager.TaskManager;
+import tasks.Epic;
+import tasks.SubTask;
+import tasks.Task;
+import manager.TaskManager;
 
 public class Main {
 
@@ -35,20 +35,32 @@ public class Main {
 
         System.out.println("Меняем статус задачи");
         System.out.println("... ... ...");
-        taskManager.updateTask(taskManager.createUpdatedTask("status", "DONE", 1));
+        Task updatedTask = new Task("Вынести мусор", "по пути в магазин вынести мусор");
+        updatedTask.setId(1);
+        updatedTask.setStatus("DONE");
+        taskManager.updateTask(updatedTask);
         System.out.println(taskManager.getAllTasks());
         System.out.println("____________");
 
 
         System.out.println("Меняем статус подзадачи");
-        taskManager.updateSubtask(taskManager.createUpdatedSubTask("status", "DONE", 4));
-        taskManager.updateSubtask(taskManager.createUpdatedSubTask("status", "DONE", 7));
+        SubTask updatedSubTask = new SubTask("Внести исправления в соответствии с комментариями",
+                "изучить комментарии и внести соответствующие исправления в код", 3);
+        updatedSubTask.setId(4);
+        updatedSubTask.setStatus("DONE");
+        taskManager.updateSubtask(updatedSubTask);
+
+        updatedSubTask = new SubTask("Пропылесосить", "Пропылесосить", 6);
+        updatedSubTask.setId(7);
+        updatedSubTask.setStatus("DONE");
+        taskManager.updateSubtask(updatedSubTask);
+
         System.out.println("... ... ...");
         System.out.println("Печатаем эпики");
         System.out.println(taskManager.getAllEpicTasks());
         System.out.println("____________");
 
-        System.out.println("Удаляем задачу и эпик");
+        System.out.println("Удаляем задачу и эпик и печатаем все эпики и задачи");
         taskManager.deleteTaskById(2);
         taskManager.deleteEpicById(6);
         System.out.println(taskManager.getAllTasks());

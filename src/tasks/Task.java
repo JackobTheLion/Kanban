@@ -1,12 +1,13 @@
 package tasks;
 
+import manager.Status;
 import java.util.Objects;
 
 public class Task {
     protected String name;
     protected String description;
     protected int id;
-    protected String status = "NEW"; //по умолчанию при создании задачи ее статус NEW
+    protected Status status = Status.NEW; //по умолчанию при создании задачи ее статус NEW
 
     public Task(String name, String description) {
         this.name = name;
@@ -21,15 +22,15 @@ public class Task {
         return id;
     }
 
-    public void setStatus(String status) {
-        if (status.equals("NEW") || status.equals("IN_PROGRESS") || status.equals("DONE")) {
+    public void setStatus(Status status) {
+        if (status == Status.NEW || status == Status.IN_PROGRESS || status == Status.DONE) {
             this.status = status;
         } else {
             System.out.println("Ошибка присвоения статуса. Неверный status");
         }
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
@@ -71,7 +72,9 @@ public class Task {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return id == task.id && Objects.equals(name, task.name) && Objects.equals(description, task.description) && Objects.equals(status, task.status);
+        return id == task.id && Objects.equals(name, task.name)
+                && Objects.equals(description, task.description)
+                && Objects.equals(status, task.status);
     }
 
     @Override

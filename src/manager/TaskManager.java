@@ -5,6 +5,7 @@ import tasks.SubTask;
 import tasks.Task;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public interface TaskManager  {
 
@@ -47,4 +48,6 @@ public interface TaskManager  {
     void createEpic(Epic epic);
 
     void createSubTask(SubTask subTask);
+
+    public LinkedList<Task> getHistory();
 }

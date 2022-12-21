@@ -1,5 +1,6 @@
 import manager.*;
 import tasks.Epic;
+import tasks.Status;
 import tasks.SubTask;
 import tasks.Task;
 
@@ -7,9 +8,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Managers managers = new Managers();
-        TaskManager inMemoryTaskManager = managers.getDefault();
-        HistoryManager inMemoryHistoryManager = Managers.getDefaultHistory();
+        TaskManager inMemoryTaskManager = Managers.getDefault();
 
  /*       inMemoryTaskManager.createTask(new Task("Вынести мусор", "по пути в магазин вынести мусор"));
         inMemoryTaskManager.createTask(new Task("Помыть чашку", "Помыть чашку после кофе"));
@@ -45,7 +44,6 @@ public class Main {
         System.out.println(inMemoryTaskManager.getAllTasks());
         System.out.println("____________");
 
-
         System.out.println("Меняем статус подзадачи");
         SubTask updatedSubTask = new SubTask("Внести исправления в соответствии с комментариями",
                 "изучить комментарии и внести соответствующие исправления в код", 3);
@@ -71,23 +69,28 @@ public class Main {
         System.out.println("____________");*/
 
         System.out.println("Проверим историю. Должно быть пусто");
-        System.out.println(inMemoryHistoryManager.getHistory());
+        System.out.println(inMemoryTaskManager.getHistory());
         System.out.println("____________");
+
         System.out.println("Создадим задачи и вызовем 10 задач по id");
-        inMemoryTaskManager.createTask(new Task("задача 1", "описание 1"));
-        inMemoryTaskManager.createTask(new Task("задача 2", "описание 2"));
-        inMemoryTaskManager.createTask(new Task("задача 3", "описание 3"));
-        inMemoryTaskManager.createTask(new Task("задача 4", "описание 4"));
-        inMemoryTaskManager.createTask(new Task("задача 5", "описание 5"));
-        inMemoryTaskManager.createTask(new Task("задача 6", "описание 6"));
-        inMemoryTaskManager.createEpic(new Epic("эпик 1", "описание эпика 1"));
-        inMemoryTaskManager.createEpic(new Epic("эпик 2", "описание эпика 2"));
-        inMemoryTaskManager.createEpic(new Epic("эпик 3", "описание эпика 3"));
-        inMemoryTaskManager.createEpic(new Epic("эпик 4", "описание эпика 4"));
-        inMemoryTaskManager.createSubTask(new SubTask("Сабтаск 1","описание сабтаска 1", 7));
-        inMemoryTaskManager.createSubTask(new SubTask("Сабтаск 2","описание сабтаска 2", 7));
-        inMemoryTaskManager.createSubTask(new SubTask("Сабтаск 3","описание сабтаска 3", 7));
-        inMemoryTaskManager.createSubTask(new SubTask("Сабтаск 4","описание сабтаска 4", 7));
+        inMemoryTaskManager.createTask(new Task("задача 1", "описание 1", Status.NEW));
+        inMemoryTaskManager.createTask(new Task("задача 2", "описание 2", Status.NEW));
+        inMemoryTaskManager.createTask(new Task("задача 3", "описание 3", Status.NEW));
+        inMemoryTaskManager.createTask(new Task("задача 4", "описание 4", Status.NEW));
+        inMemoryTaskManager.createTask(new Task("задача 5", "описание 5", Status.NEW));
+        inMemoryTaskManager.createTask(new Task("задача 6", "описание 6", Status.NEW));
+        inMemoryTaskManager.createEpic(new Epic("эпик 1", "описание эпика 1", Status.NEW));
+        inMemoryTaskManager.createEpic(new Epic("эпик 2", "описание эпика 2", Status.NEW));
+        inMemoryTaskManager.createEpic(new Epic("эпик 3", "описание эпика 3", Status.NEW));
+        inMemoryTaskManager.createEpic(new Epic("эпик 4", "описание эпика 4", Status.NEW));
+        inMemoryTaskManager.createSubTask(new SubTask("Сабтаск 1",
+                "описание сабтаска 1", 7, Status.NEW));
+        inMemoryTaskManager.createSubTask(new SubTask("Сабтаск 2",
+                "описание сабтаска 2", 7, Status.NEW));
+        inMemoryTaskManager.createSubTask(new SubTask("Сабтаск 3",
+                "описание сабтаска 3", 7, Status.NEW));
+        inMemoryTaskManager.createSubTask(new SubTask("Сабтаск 4",
+                "описание сабтаска 4", 8, Status.DONE));
 
         inMemoryTaskManager.getTaskById(1);
         inMemoryTaskManager.getTaskById(2);
@@ -100,7 +103,7 @@ public class Main {
         inMemoryTaskManager.getSubTaskById(13);
         inMemoryTaskManager.getSubTaskById(14);
 
-        System.out.println(inMemoryHistoryManager.getHistory());
+        System.out.println(inMemoryTaskManager.getHistory());
         System.out.println("____________");
 
         System.out.println("вызовем еще 2 задачи и снова посмотрим историю");
@@ -108,7 +111,6 @@ public class Main {
         inMemoryTaskManager.getEpicById(7);
         inMemoryTaskManager.getEpicById(8);
 
-        System.out.println(inMemoryHistoryManager.getHistory());
-
+        System.out.println(inMemoryTaskManager.getHistory());
     }
 }

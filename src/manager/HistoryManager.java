@@ -1,9 +1,10 @@
 package manager;
 
 import tasks.Task;
-import java.util.ArrayList;
+
+import java.util.LinkedList;
 
 public interface HistoryManager {
     void addToHistory(Task task);
-    ArrayList<Task> getHistory();
+    LinkedList<Task> getHistory();
 }

@@ -1,20 +1,22 @@
 package manager;
 
 import tasks.Epic;
+import tasks.Status;
 import tasks.SubTask;
 import tasks.Task;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 public class InMemoryTaskManager implements TaskManager {
 
-    public HistoryManager inMemoryHistoryManager = Managers.getDefaultHistory();
+    private final HistoryManager inMemoryHistoryManager = Managers.getDefaultHistory();
 
-    private final HashMap<Integer, Task> tasks = new HashMap<>();
-    private final HashMap<Integer, Epic> epicTasks = new HashMap<>();
-    private final HashMap<Integer, SubTask> subTasks = new HashMap<>();
-    private int id = 0;
+    private final static HashMap<Integer, Task> tasks = new HashMap<>();
+    private final static HashMap<Integer, Epic> epicTasks = new HashMap<>();
+    private final static HashMap<Integer, SubTask> subTasks = new HashMap<>();
+    private static int id = 0;
 
     @Override
     public ArrayList<Task> getAllTasks() {
@@ -33,35 +35,37 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Task getTaskById(int id) {
-        if (!tasks.containsKey(id)) {
+        Task task = tasks.get(id);
+        if (task == null) {
             System.out.println("ID " + id + " не найден в списках задач");
             return null;
         } else {
-            inMemoryHistoryManager.addToHistory(tasks.get(id));
-            return tasks.get(id);
+            inMemoryHistoryManager.addToHistory(task);
+            return task;
         }
     }
 
     @Override
     public Epic getEpicById(int id) {
-        if (!epicTasks.containsKey(id)) {
+        Epic epic = epicTasks.get(id);
+        if (epic == null) {
             System.out.println("ID " + id + " не найден в списке эпиков");
             return null;
         } else {
-            inMemoryHistoryManager.addToHistory(epicTasks.get(id));
-            return epicTasks.get(id);
+            inMemoryHistoryManager.addToHistory(epic);
+            return epic;
         }
     }
 
     @Override
     public SubTask getSubTaskById(int id) {
-        if (!subTasks.containsKey(id)) {
+        SubTask subTask = subTasks.get(id);
+        if (subTask == null) {
             System.out.println("ID " + id + " не найден в списке сабтасков");
             return null;
         } else {
-            inMemoryHistoryManager.addToHistory(subTasks.get(id));
-            return subTasks.get(id);
-
+            inMemoryHistoryManager.addToHistory(subTask);
+            return subTask;
         }
     }
 
@@ -214,9 +218,15 @@ public class InMemoryTaskManager implements TaskManager {
             subTask.setId(id);
             subTasks.put(id, subTask);
             epicTasks.get(subTask.getEpicId()).getSubTasksOfEpic().add(id); //добавляем саб таск в список эпика
+            calcStatusOfEpic(subTask.getEpicId());
         } else {
             System.out.println("Указанного EpicTask не существует");
         }
+    }
+
+    @Override
+    public LinkedList<Task> getHistory() {
+        return inMemoryHistoryManager.getHistory();
     }
 
     private void calcStatusOfEpic(int id) {

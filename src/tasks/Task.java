@@ -1,17 +1,17 @@
 package tasks;
 
-import manager.Status;
 import java.util.Objects;
 
 public class Task {
     protected String name;
     protected String description;
     protected int id;
-    protected Status status = Status.NEW; //по умолчанию при создании задачи ее статус NEW
+    protected Status status; //по умолчанию при создании задачи ее статус NEW
 
-    public Task(String name, String description) {
+    public Task(String name, String description, Status status) {
         this.name = name;
         this.description = description;
+        this.status = status;
     }
 
     public void setId(int id) {

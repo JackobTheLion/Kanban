@@ -6,7 +6,7 @@ public class Task {
     protected String name;
     protected String description;
     protected int id;
-    protected Status status; //по умолчанию при создании задачи ее статус NEW
+    protected Status status;
 
     public Task(String name, String description, Status status) {
         this.name = name;

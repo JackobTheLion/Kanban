@@ -4,16 +4,15 @@ import tasks.Epic;
 import tasks.SubTask;
 import tasks.Task;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.List;
 
 public interface TaskManager  {
 
-    ArrayList<Task> getAllTasks();
+    List<Task> getAllTasks();
 
-    ArrayList<Epic> getAllEpicTasks();
+    List<Epic> getAllEpicTasks();
 
-    ArrayList<SubTask> getAllSubTasks();
+    List<SubTask> getAllSubTasks();
 
     Task getTaskById(int id);
 
@@ -41,7 +40,7 @@ public interface TaskManager  {
 
     void updateSubtask(SubTask updatedSubTask);
 
-    ArrayList<SubTask> getSubTasksByEpicId(int id);
+    List<SubTask> getSubTasksByEpicId(int id);
 
     void createTask(Task task);
 
@@ -49,5 +48,5 @@ public interface TaskManager  {
 
     void createSubTask(SubTask subTask);
 
-    public LinkedList<Task> getHistory();
+    List<Task> getHistory();
 }

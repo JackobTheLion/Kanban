@@ -17,11 +17,15 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void addToHistory(Task task) {
-        if (history.size() < MAX_HISTORY_SIZE) {
-            history.add(task);
-        } else {
+        if (task == null) {
+            System.out.println("Ошибка в addToHistory. Task == null");
+            return;
+        }
+
+        history.add(task);
+
+        if (history.size() > MAX_HISTORY_SIZE) {
             history.removeFirst();
-            history.add(task);
         }
     }
 }

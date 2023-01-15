@@ -80,10 +80,7 @@ public class Main {
         inMemoryTaskManager.createSubTask(new SubTask("Сабтаск 3",
                 "описание сабтаска 3", 3, Status.NEW));
         inMemoryTaskManager.createEpic(new Epic("эпик 2", "описание эпика 1", Status.NEW));
-        inMemoryTaskManager.createTask(new Task("задача 3", "описание 1", Status.NEW));
-        inMemoryTaskManager.createTask(new Task("задача 4", "описание 1", Status.NEW));
-        inMemoryTaskManager.createTask(new Task("задача 5", "описание 1", Status.NEW));
-        inMemoryTaskManager.createTask(new Task("задача 6", "описание 1", Status.NEW));
+
 
         System.out.println("Вызовем задачи и посмотрим историю");
         inMemoryTaskManager.getTaskById(1);
@@ -93,14 +90,11 @@ public class Main {
         inMemoryTaskManager.getSubTaskById(5);
         inMemoryTaskManager.getSubTaskById(6);
         inMemoryTaskManager.getEpicById(7);
-        inMemoryTaskManager.getTaskById(8);
-        inMemoryTaskManager.getTaskById(9);
-        inMemoryTaskManager.getTaskById(10);
 
         System.out.println(inMemoryTaskManager.getHistory());
         System.out.println("____________");
 
-        System.out.println("Вызовем задачи в другом порядке и по    смотрим историю");
+        System.out.println("Вызовем задачи в другом порядке и посмотрим историю");
         inMemoryTaskManager.getTaskById(2);
         inMemoryTaskManager.getSubTaskById(5);
         inMemoryTaskManager.getSubTaskById(6);
@@ -116,15 +110,9 @@ public class Main {
         System.out.println(inMemoryTaskManager.getHistory());
         System.out.println("____________");
 
-        System.out.println("Удалим эпик с ID 3 и проверим историю");
+        System.out.println("Удалим эпик с ID 3 и проверим историю (должны удалиться в т.ч. его подзадачи)");
         inMemoryTaskManager.deleteEpicById(3);
         System.out.println(inMemoryTaskManager.getHistory());
-
-
-
-
-
-
 
     }
 }

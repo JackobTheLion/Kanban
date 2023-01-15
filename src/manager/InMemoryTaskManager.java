@@ -1,21 +1,19 @@
 package manager;
 
-import tasks.Epic;
-import tasks.Status;
-import tasks.SubTask;
-import tasks.Task;
+import tasks.*;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.HashMap;
 
 public class InMemoryTaskManager implements TaskManager {
 
     private final HistoryManager inMemoryHistoryManager = Managers.getDefaultHistory();
 
-    private final static HashMap<Integer, Task> tasks = new HashMap<>();
-    private final static HashMap<Integer, Epic> epicTasks = new HashMap<>();
-    private final static HashMap<Integer, SubTask> subTasks = new HashMap<>();
-    private static int id = 0;
+    private final HashMap<Integer, Task> tasks = new HashMap<>();
+    private final HashMap<Integer, Epic> epicTasks = new HashMap<>();
+    private final HashMap<Integer, SubTask> subTasks = new HashMap<>();
+    private int id = 0;
 
     @Override
     public ArrayList<Task> getAllTasks() {
@@ -39,7 +37,7 @@ public class InMemoryTaskManager implements TaskManager {
             System.out.println("ID " + id + " не найден в списках задач");
             return null;
         } else {
-            inMemoryHistoryManager.addToHistory(task);
+            inMemoryHistoryManager.add(task);
             return task;
         }
     }
@@ -51,7 +49,7 @@ public class InMemoryTaskManager implements TaskManager {
             System.out.println("ID " + id + " не найден в списке эпиков");
             return null;
         } else {
-            inMemoryHistoryManager.addToHistory(epic);
+            inMemoryHistoryManager.add(epic);
             return epic;
         }
     }
@@ -63,7 +61,7 @@ public class InMemoryTaskManager implements TaskManager {
             System.out.println("ID " + id + " не найден в списке сабтасков");
             return null;
         } else {
-            inMemoryHistoryManager.addToHistory(subTask);
+            inMemoryHistoryManager.add(subTask);
             return subTask;
         }
     }
@@ -229,7 +227,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public ArrayList<Task> getHistory() {
+    public List<Task> getHistory() {
         return inMemoryHistoryManager.getHistory();
     }
 

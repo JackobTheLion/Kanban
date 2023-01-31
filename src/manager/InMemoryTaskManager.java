@@ -8,12 +8,12 @@ import java.util.HashMap;
 
 public class InMemoryTaskManager implements TaskManager {
 
-    private final HistoryManager inMemoryHistoryManager = Managers.getDefaultHistory();
+    protected final HistoryManager inMemoryHistoryManager = Managers.getDefaultHistory();
 
-    private final HashMap<Integer, Task> tasks = new HashMap<>();
-    private final HashMap<Integer, Epic> epicTasks = new HashMap<>();
-    private final HashMap<Integer, SubTask> subTasks = new HashMap<>();
-    private int id = 0;
+    protected final HashMap<Integer, Task> tasks = new HashMap<>();
+    protected final HashMap<Integer, Epic> epicTasks = new HashMap<>();
+    protected final HashMap<Integer, SubTask> subTasks = new HashMap<>();
+    protected int id = 0;
 
     @Override
     public ArrayList<Task> getAllTasks() {
@@ -231,7 +231,7 @@ public class InMemoryTaskManager implements TaskManager {
         return inMemoryHistoryManager.getHistory();
     }
 
-    private void calcStatusOfEpic(int id) {
+    protected void calcStatusOfEpic(int id) {
         Epic epic = epicTasks.get(id);
         ArrayList<Integer> subTasksOfEpic = epic.getSubTasksOfEpic(); //достаем список сабов эпика
         int statusCountNew = 0; //счетчик для статусов NEW

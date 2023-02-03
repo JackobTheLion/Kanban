@@ -42,11 +42,11 @@ public interface TaskManager  {
 
     List<SubTask> getSubTasksByEpicId(int id);
 
-    void createTask(Task task);
+    int createTask(Task task);
 
-    void createEpic(Epic epic);
+    int createEpic(Epic epic);
 
-    void createSubTask(SubTask subTask);
+    int createSubTask(SubTask subTask);
 
     List<Task> getHistory();
 }

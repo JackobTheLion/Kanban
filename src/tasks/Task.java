@@ -7,6 +7,7 @@ public class Task {
     protected String description;
     protected int id;
     protected Status status;
+    private TaskType type = TaskType.TASK;
 
     public Task(String name, String description, Status status) {
         this.name = name;
@@ -50,18 +51,16 @@ public class Task {
         this.description = description;
     }
 
+    public TaskType getType() {
+        return type;
+    }
     @Override
     public String toString() {
         String descriptionLength;
-        if (description == null){
-            descriptionLength = "null";
-        } else {
-            descriptionLength = String.valueOf(description.length());
-        }
 
         return "Task{" +
                 "name='" + name + '\'' +
-                ", description.length='" + descriptionLength + '\'' +
+                ", description='" + description + '\'' +
                 ", id=" + id +
                 ", status='" + status + '\'' +
                 "}";

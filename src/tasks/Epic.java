@@ -6,6 +6,7 @@ import java.util.Objects;
 public class Epic extends Task {
 
     private ArrayList<Integer> subTasksOfEpic = new ArrayList<>(); // список подзадач эпика ID -> subTask
+    private TaskType type = TaskType.EPIC;
 
     public Epic(String name, String description, Status status) {
         super(name, description, status);
@@ -14,6 +15,11 @@ public class Epic extends Task {
     public ArrayList<Integer> getSubTasksOfEpic() {
         return subTasksOfEpic;
     }
+
+    @Override
+    public TaskType getType() {
+        return type;
+    } //без переопределения всегда возвращается значение TASK в CSVTaskFormat.taskFromString(), не понимаю почему
 
     public void setSubTasksOfEpic(ArrayList<Integer> subTasksOfEpic) {
         this.subTasksOfEpic = subTasksOfEpic;
@@ -29,23 +35,10 @@ public class Epic extends Task {
 
     @Override
     public String toString() {
-        String descriptionLength;
-        if (description == null) {
-            descriptionLength = "null";
-        } else {
-            descriptionLength = String.valueOf(description.length());
-        }
-        String subTasksOfEpicSize;
-        if (subTasksOfEpic == null) {
-            subTasksOfEpicSize = "null";
-        } else {
-            subTasksOfEpicSize = String.valueOf(subTasksOfEpic.size());
-        }
-
         return "EpicTask{" +
-                ", name='" + name + '\'' +
-                ", description.length='" + descriptionLength + '\'' +
-                "subTasksOfEpic.size=" + subTasksOfEpicSize +
+                "name='" + name + '\'' +
+                ", description'" + description + '\'' +
+                "subTasksOfEpic=" + subTasksOfEpic +
                 ", id=" + id +
                 ", status='" + status + '\'' +
                 '}';

@@ -13,7 +13,7 @@ public class InMemoryTaskManager implements TaskManager {
     protected final HashMap<Integer, Task> tasks = new HashMap<>();
     protected final HashMap<Integer, Epic> epicTasks = new HashMap<>();
     protected final HashMap<Integer, SubTask> subTasks = new HashMap<>();
-    protected int id = 0;
+    protected int generatorId = 0;
 
     @Override
     public ArrayList<Task> getAllTasks() {
@@ -187,43 +187,46 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void createTask(Task task) {
+    public int createTask(Task task) {
         if (task == null) {
             System.out.println("Ошибка. task == nul");
-            return;
+            return -1;
         }
-        id++;
-        task.setId(id);
-        tasks.put(id, task);
+        generatorId++;
+        task.setId(generatorId);
+        tasks.put(generatorId, task);
+        return generatorId;
     }
 
     @Override
-    public void createEpic(Epic epic) {
+    public int createEpic(Epic epic) {
         if (epic == null) {
             System.out.println("Ошибка. epic == null");
-            return;
+            return -1;
         }
-        id++;
-        epic.setId(id);
-        epicTasks.put(id, epic);
+        generatorId++;
+        epic.setId(generatorId);
+        epicTasks.put(generatorId, epic);
+        return generatorId;
     }
 
     @Override
-    public void createSubTask(SubTask subTask) {
+    public int createSubTask(SubTask subTask) {
         if (subTask == null) {
             System.out.println("Ошибка. subTask == null");
-            return;
+            return -1;
         }
         //subTask можно создать только в том случае, если есть соответствующий epicTask
         if (epicTasks.containsKey(subTask.getEpicId())) {
-            id++;
-            subTask.setId(id);
-            subTasks.put(id, subTask);
-            epicTasks.get(subTask.getEpicId()).getSubTasksOfEpic().add(id); //добавляем саб таск в список эпика
+            generatorId++;
+            subTask.setId(generatorId);
+            subTasks.put(generatorId, subTask);
+            epicTasks.get(subTask.getEpicId()).getSubTasksOfEpic().add(generatorId); //добавляем саб таск в список эпика
             calcStatusOfEpic(subTask.getEpicId());
         } else {
             System.out.println("Указанного EpicTask не существует");
         }
+        return generatorId;
     }
 
     @Override

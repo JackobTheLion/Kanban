@@ -10,12 +10,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import static manager.CSVTaskFormat.*;
+
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
 
     public static void main(String[] args) {
 
-        File file = new File("src/resources/backup.csv");
+
 
         TaskManager FileBackedTasksManager = Managers.getDefault();
         System.out.println("Проверим историю. Должно быть пусто");
@@ -69,6 +71,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
         System.out.println("____________");
         System.out.println("Создадим fileBackedTasksManager из файла бекапа.");
+        File file = new File("resources/backup.csv");
         FileBackedTasksManager fileBackedTasksManager = loadFromFile(file);
 
         System.out.println("Проверим историю в fileBackedTasksManager.")   ;
@@ -245,7 +248,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
     private void save() {
         StringBuilder saved = new StringBuilder();
-        saved.append(getHeader() + System.lineSeparator());
+        saved.append(getHeader()).append(System.lineSeparator());
         for (Task task : tasks.values()) {
             saved.append(taskToString(task) + System.lineSeparator());
         }
@@ -266,20 +269,5 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         } catch (IOException e) {
             throw new ManagerSaveException("Can't save to file: " + file.getName(), e);
         }
-
-    }
-
-    public static String getHeader() {
-        return "id,type,name,status,description,epic";
-    }
-
-    private String taskToString(Task task) { //id,type,name,status,description,epic
-        return task.getId() + ","
-                    + task.getType() + ","
-                    + task.getName() + ","
-                    + task.getStatus() + ","
-                    + task.getDescription() + ","
-                    + (task.getType().equals(TaskType.SUBTASK) ? ((SubTask) task).getEpicId() : "");
-                //getEpicId() есть только у сабтаска, поэтому явное приведение
     }
 }

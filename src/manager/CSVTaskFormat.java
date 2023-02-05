@@ -7,7 +7,7 @@ import java.util.List;
 
 public class CSVTaskFormat {
 
-    static Task taskFromString(String value) {
+    public static Task taskFromString(String value) {
         final String[] taskFields = value.split(","); //id,type,name,status,description,epic
         final int id = Integer.parseInt(taskFields[0]);
         final TaskType type = TaskType.valueOf(taskFields[1]);
@@ -31,7 +31,7 @@ public class CSVTaskFormat {
         return subTask;
     }
 
-    static String historyToString(HistoryManager historyManager) {
+    public static String historyToString(HistoryManager historyManager) {
         final List<Task> history = historyManager.getHistory(); //достаем историю
         if (history.isEmpty()) { //если история пуста
             return ""; //возвращаем ""
@@ -46,12 +46,26 @@ public class CSVTaskFormat {
         return sb.toString();
     }
 
-    static List<Integer> historyFromString(String value) {
+    public static List<Integer> historyFromString(String value) {
         String[] values = value.split(",");
         List<Integer> history = new ArrayList<>();
         for (String element : values) {
             history.add(Integer.parseInt(element));
         }
         return history;
+    }
+
+    public static String getHeader() {
+        return "id,type,name,status,description,epic";
+    }
+
+    public static String taskToString(Task task) { //id,type,name,status,description,epic
+        return task.getId() + ","
+                + task.getType() + ","
+                + task.getName() + ","
+                + task.getStatus() + ","
+                + task.getDescription() + ","
+                + (task.getType().equals(TaskType.SUBTASK) ? ((SubTask) task).getEpicId() : "");
+        //getEpicId() есть только у сабтаска, поэтому явное приведение
     }
 }

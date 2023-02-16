@@ -22,7 +22,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     @Override
     public void add(Task task) {
         if (task == null) {
-            System.out.println("Ошибка в InMemoryHistoryManager.add. Task == null");
+            //System.out.println("Ошибка в InMemoryHistoryManager.add. Task == null");
             return;
         }
 
@@ -36,6 +36,12 @@ public class InMemoryHistoryManager implements HistoryManager {
     public void remove(int id) {
         Node node = history.get(id);
         removeNode(id);
+    }
+
+    public void clearHistory() {
+        first = null;
+        last = null;
+        history.clear();
     }
 
     private void linkLast(Task task) {

@@ -38,10 +38,12 @@ public class Epic extends Task {
         return "EpicTask{" +
                 "name='" + name + '\'' +
                 ", description'" + description + '\'' +
+                ", start time='" + startTime + '\'' +
+                ", duration='" + duration + '\'' +
                 "subTasksOfEpic=" + subTasksOfEpic +
                 ", id=" + id +
                 ", status='" + status + '\'' +
-                '}';
+                '}' + System.lineSeparator();
     }
 
     @Override

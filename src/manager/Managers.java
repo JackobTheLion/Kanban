@@ -1,6 +1,7 @@
 package manager;
 
 import java.io.File;
+import java.time.LocalDateTime;
 
 public class Managers {
 
@@ -10,5 +11,9 @@ public class Managers {
 
     public static HistoryManager getDefaultHistory() {
         return new InMemoryHistoryManager();
+    }
+
+    public static ScheduleManager getDefaultScheduleManager() {
+        return new ScheduleManager(LocalDateTime.of(2023, 02, 15, 12,0));
     }
 }

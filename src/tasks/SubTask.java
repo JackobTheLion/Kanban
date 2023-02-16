@@ -30,9 +30,11 @@ public class SubTask extends Task {
                 "idOfEpic=" + epicId +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
+                ", start time='" + startTime + '\'' +
+                ", duration='" + duration + '\'' +
                 ", id=" + id +
                 ", status='" + status + '\'' +
-                '}';
+                '}' + System.lineSeparator();
     }
 
     @Override

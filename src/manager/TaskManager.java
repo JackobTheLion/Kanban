@@ -5,6 +5,7 @@ import tasks.SubTask;
 import tasks.Task;
 
 import java.util.List;
+import java.util.TreeSet;
 
 public interface TaskManager  {
 
@@ -49,4 +50,6 @@ public interface TaskManager  {
     int createSubTask(SubTask subTask);
 
     List<Task> getHistory();
+
+    public List<Task> getPrioritizedTasks();
 }

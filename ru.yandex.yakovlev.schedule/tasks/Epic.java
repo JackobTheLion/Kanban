@@ -1,5 +1,6 @@
 package tasks;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -20,6 +21,10 @@ public class Epic extends Task {
     public TaskType getType() {
         return type;
     } //без переопределения всегда возвращается значение TASK в CSVTaskFormat.taskFromString(), не понимаю почему
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
 
     public void setSubTasksOfEpic(ArrayList<Integer> subTasksOfEpic) {
         this.subTasksOfEpic = subTasksOfEpic;

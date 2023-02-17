@@ -79,7 +79,7 @@ public class Task {
         setEndTime();
     }
 
-    protected void setEndTime() {
+    public void setEndTime() {
         if (duration != null && startTime != null) endTime = startTime.plusMinutes(duration.toMinutes());
     }
 

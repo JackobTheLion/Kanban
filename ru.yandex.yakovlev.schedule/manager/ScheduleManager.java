@@ -18,7 +18,7 @@ public class ScheduleManager {
     private final ArrayList<TimeSlot> schedule = new ArrayList<>(NUMBER_OF_SLOTS);
     private final LocalDateTime scheduleStart;
 
-    ScheduleManager(LocalDateTime scheduleStart) {
+    public ScheduleManager(LocalDateTime scheduleStart) {
         this.scheduleStart = scheduleStart;
         schedule.add(new TimeSlot(scheduleStart));
 
@@ -139,7 +139,7 @@ public class ScheduleManager {
     public static class TimeSlot {
         LocalDateTime startTime;
         LocalDateTime endTime;
-        boolean isAvailable = true;
+        public boolean isAvailable = true;
 
         TimeSlot(LocalDateTime startTime) {
             this.startTime = startTime;
@@ -151,7 +151,9 @@ public class ScheduleManager {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             TimeSlot timeSlot = (TimeSlot) o;
-            return isAvailable == timeSlot.isAvailable && startTime.equals(timeSlot.startTime) && endTime.equals(timeSlot.endTime);
+            return isAvailable == timeSlot.isAvailable
+                    && startTime.equals(timeSlot.startTime)
+                    && endTime.equals(timeSlot.endTime);
         }
 
         @Override

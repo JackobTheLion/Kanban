@@ -1,5 +1,6 @@
-package manager;
+package manager.scheduleManager;
 
+import manager.ScheduleManager;
 import manager.exceptions.ScheduleBookingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

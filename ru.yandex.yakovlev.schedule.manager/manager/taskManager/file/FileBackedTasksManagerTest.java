@@ -1,7 +1,9 @@
-package manager;
+package manager.taskManager.file;
 
+import manager.FileBackedTasksManager;
+import manager.ScheduleManager;
 import manager.exceptions.ManagerSaveException;
-import org.junit.jupiter.api.BeforeAll;
+import manager.taskManager.TaskManagerTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tasks.Epic;
@@ -21,7 +23,7 @@ import static manager.FileBackedTasksManager.loadFromFile;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager> {
-    File file = new File("test/resources/backupTest.csv");
+    File file = new File("ru.yandex.yakovlev.schedule.manager/resources/backupTest.csv");
 
     @BeforeEach
     public void beforeEach() {

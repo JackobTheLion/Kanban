@@ -1,11 +1,10 @@
 package manager;
 
-import tasks.Epic;
-import tasks.SubTask;
-import tasks.Task;
+import ru.yandex.yakovlev.schedule.tasks.Epic;
+import ru.yandex.yakovlev.schedule.tasks.SubTask;
+import ru.yandex.yakovlev.schedule.tasks.Task;
 
 import java.util.List;
-import java.util.TreeSet;
 
 public interface TaskManager  {
 

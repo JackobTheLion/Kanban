@@ -1,6 +1,6 @@
 package manager;
 
-import tasks.*;
+import ru.yandex.yakovlev.schedule.tasks.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

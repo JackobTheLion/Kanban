@@ -2,7 +2,7 @@ package manager.taskManager;
 
 import manager.TaskManager;
 import org.junit.jupiter.api.Test;
-import tasks.*;
+import ru.yandex.yakovlev.schedule.tasks.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

@@ -1,6 +1,6 @@
 package manager;
 
-import tasks.Task;
+import ru.yandex.yakovlev.schedule.tasks.Task;
 
 import java.util.List;
 

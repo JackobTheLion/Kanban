@@ -1,7 +1,7 @@
 package manager;
 
 import manager.exceptions.ScheduleBookingException;
-import tasks.*;
+import ru.yandex.yakovlev.schedule.tasks.*;
 
 import java.time.LocalDateTime;
 import java.util.*;

@@ -6,10 +6,10 @@ import manager.exceptions.ManagerSaveException;
 import manager.taskManager.TaskManagerTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import tasks.Epic;
-import tasks.Status;
-import tasks.SubTask;
-import tasks.Task;
+import ru.yandex.yakovlev.schedule.tasks.Epic;
+import ru.yandex.yakovlev.schedule.tasks.Status;
+import ru.yandex.yakovlev.schedule.tasks.SubTask;
+import ru.yandex.yakovlev.schedule.tasks.Task;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -19,11 +19,10 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-import static manager.FileBackedTasksManager.loadFromFile;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager> {
-    File file = new File("ru.yandex.yakovlev.schedule.manager/resources/backupTest.csv");
+    File file = new File("ru.yandex.yakovlev.schedule.ru.yandex.yakovlev.schedule.manager/resources/backupTest.csv");
 
     @BeforeEach
     public void beforeEach() {
@@ -89,7 +88,7 @@ public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksM
         taskManager.getEpicById(epic2.getId());
         taskManager.getSubTaskById(subTask4.getId());
 
-        FileBackedTasksManager loadedTaskManager = loadFromFile(file);
+        FileBackedTasksManager loadedTaskManager = FileBackedTasksManager.loadFromFile(file);
 
         assertEquals(taskManager.getHistory(), loadedTaskManager.getHistory()
                 , "Истории не равны");
@@ -150,7 +149,7 @@ public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksM
                 epic2.getId(), Status.NEW);
         taskManager.createSubTask(subTask4);
 
-        FileBackedTasksManager loadedTaskManager = loadFromFile(file);
+        FileBackedTasksManager loadedTaskManager = FileBackedTasksManager.loadFromFile(file);
 
         assertEquals(taskManager.getHistory(), loadedTaskManager.getHistory()
                 , "Истории не равны");
@@ -171,7 +170,7 @@ public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksM
 
     @Test
     public void saveAndLoadNoTasksTest() {
-        FileBackedTasksManager loadedTaskManager = loadFromFile(file);
+        FileBackedTasksManager loadedTaskManager = FileBackedTasksManager.loadFromFile(file);
 
         assertEquals(taskManager.getHistory(), loadedTaskManager.getHistory()
                 , "Истории не равны");

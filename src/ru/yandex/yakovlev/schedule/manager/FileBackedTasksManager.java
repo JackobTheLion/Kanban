@@ -1,7 +1,7 @@
 package manager;
 
 import manager.exceptions.ManagerSaveException;
-import tasks.*;
+import ru.yandex.yakovlev.schedule.tasks.*;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -99,8 +99,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         System.out.println(fileBackedTasksManager.getHistory().equals(fileBackedTasksManager1.getHistory()));
         System.out.println("____________");
 
-        System.out.println("Проверим в tasks.")   ;
-        System.out.println("tasks одинаковые?");
+        System.out.println("Проверим в ru.yandex.yakovlev.schedule.tasks.")   ;
+        System.out.println("ru.yandex.yakovlev.schedule.tasks одинаковые?");
         System.out.println(fileBackedTasksManager.getAllTasks().equals(fileBackedTasksManager1.getAllTasks()));
         System.out.println("____________");
 
@@ -285,7 +285,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     protected Task findTask(Integer id) { //поиск нужной задачи по ее ID
-        final Task task = tasks.get(id); //пробуем достать из tasks
+        final Task task = tasks.get(id); //пробуем достать из ru.yandex.yakovlev.schedule.tasks
         if (task != null) { //если достали не null
             return task; // возвращаем то, что достали
         }

@@ -4,8 +4,8 @@ import manager.ScheduleManager;
 import manager.exceptions.ScheduleBookingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import tasks.Status;
-import tasks.Task;
+import ru.yandex.yakovlev.schedule.tasks.Status;
+import ru.yandex.yakovlev.schedule.tasks.Task;
 
 import java.time.LocalDateTime;
 import java.util.List;

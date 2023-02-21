@@ -1,5 +1,8 @@
-import manager.*;
-import tasks.*;
+package ru.yandex.yakovlev.schedule;
+
+import ru.yandex.yakovlev.schedule.manager.Managers;
+import ru.yandex.yakovlev.schedule.manager.TaskManager;
+import ru.yandex.yakovlev.schedule.tasks.*;
 
 public class Main {
 

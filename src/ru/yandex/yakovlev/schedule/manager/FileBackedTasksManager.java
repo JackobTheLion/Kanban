@@ -1,6 +1,6 @@
-package manager;
+package ru.yandex.yakovlev.schedule.manager;
 
-import manager.exceptions.ManagerSaveException;
+import ru.yandex.yakovlev.schedule.manager.exceptions.ManagerSaveException;
 import ru.yandex.yakovlev.schedule.tasks.*;
 
 import java.io.*;
@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import static manager.CSVTaskFormat.*;
+import static ru.yandex.yakovlev.schedule.manager.CSVTaskFormat.*;
 
 
 public class FileBackedTasksManager extends InMemoryTaskManager {

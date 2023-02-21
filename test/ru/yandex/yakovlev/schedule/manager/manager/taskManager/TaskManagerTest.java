@@ -1,6 +1,6 @@
-package manager.taskManager;
+package ru.yandex.yakovlev.schedule.manager.manager.taskManager;
 
-import manager.TaskManager;
+import ru.yandex.yakovlev.schedule.manager.TaskManager;
 import org.junit.jupiter.api.Test;
 import ru.yandex.yakovlev.schedule.tasks.*;
 

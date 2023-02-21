@@ -1,7 +1,7 @@
-package manager.historyManager;
+package ru.yandex.yakovlev.schedule.manager.manager.historyManager;
 
-import manager.HistoryManager;
-import manager.InMemoryHistoryManager;
+import ru.yandex.yakovlev.schedule.manager.HistoryManager;
+import ru.yandex.yakovlev.schedule.manager.InMemoryHistoryManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

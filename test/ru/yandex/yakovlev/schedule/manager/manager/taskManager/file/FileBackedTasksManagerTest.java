@@ -1,9 +1,9 @@
-package manager.taskManager.file;
+package ru.yandex.yakovlev.schedule.manager.manager.taskManager.file;
 
-import manager.FileBackedTasksManager;
-import manager.ScheduleManager;
-import manager.exceptions.ManagerSaveException;
-import manager.taskManager.TaskManagerTest;
+import ru.yandex.yakovlev.schedule.manager.FileBackedTasksManager;
+import ru.yandex.yakovlev.schedule.manager.ScheduleManager;
+import ru.yandex.yakovlev.schedule.manager.exceptions.ManagerSaveException;
+import ru.yandex.yakovlev.schedule.manager.manager.taskManager.TaskManagerTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.yakovlev.schedule.tasks.Epic;
@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager> {
-    File file = new File("ru.yandex.yakovlev.schedule.ru.yandex.yakovlev.schedule.manager/resources/backupTest.csv");
+    File file = new File("test/ru/yandex/yakovlev/schedule/manager/resources/backupTest.csv");
 
     @BeforeEach
     public void beforeEach() {
@@ -30,7 +30,8 @@ public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksM
                 (new FileOutputStream(file), StandardCharsets.UTF_8)) {
             writer.write("");
         } catch (IOException e) {
-            throw new ManagerSaveException("Can't save to file: " + file.getName(), e);
+            throw new ManagerSaveException("Can't save to file: " + file.getName() + " at "
+                    + file.getPath(), e);
         }
         taskManager = new FileBackedTasksManager(file);
     }

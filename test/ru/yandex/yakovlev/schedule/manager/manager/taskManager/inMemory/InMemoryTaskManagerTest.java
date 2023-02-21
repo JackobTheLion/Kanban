@@ -1,7 +1,7 @@
-package manager.taskManager.inMemory;
+package ru.yandex.yakovlev.schedule.manager.manager.taskManager.inMemory;
 
-import manager.InMemoryTaskManager;
-import manager.taskManager.TaskManagerTest;
+import ru.yandex.yakovlev.schedule.manager.InMemoryTaskManager;
+import ru.yandex.yakovlev.schedule.manager.manager.taskManager.TaskManagerTest;
 import org.junit.jupiter.api.BeforeEach;
 
 public class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {

@@ -1,4 +1,4 @@
-package manager;
+package ru.yandex.yakovlev.schedule.manager;
 
 import ru.yandex.yakovlev.schedule.tasks.Epic;
 import ru.yandex.yakovlev.schedule.tasks.SubTask;

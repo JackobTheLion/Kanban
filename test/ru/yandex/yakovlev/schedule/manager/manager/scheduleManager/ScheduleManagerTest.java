@@ -1,7 +1,7 @@
-package manager.scheduleManager;
+package ru.yandex.yakovlev.schedule.manager.manager.scheduleManager;
 
-import manager.ScheduleManager;
-import manager.exceptions.ScheduleBookingException;
+import ru.yandex.yakovlev.schedule.manager.ScheduleManager;
+import ru.yandex.yakovlev.schedule.manager.exceptions.ScheduleBookingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.yakovlev.schedule.tasks.Status;

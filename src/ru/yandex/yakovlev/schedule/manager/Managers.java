@@ -1,4 +1,4 @@
-package manager;
+package ru.yandex.yakovlev.schedule.manager;
 
 import java.io.File;
 import java.time.LocalDateTime;

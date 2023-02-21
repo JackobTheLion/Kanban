@@ -1,8 +1,7 @@
-package tasks;
+package ru.yandex.yakovlev.schedule.tasks;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.Locale;
 import java.util.Objects;
 
 public class Task {

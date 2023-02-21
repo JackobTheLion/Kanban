@@ -10,7 +10,7 @@
             </Attribute>
           </value>
         </entry>
-        <entry key="\test\resources\backupTest.csv">
+        <entry key="\test\ru\yandex\yakovlev\schedule\manager\resources\backupTest.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />

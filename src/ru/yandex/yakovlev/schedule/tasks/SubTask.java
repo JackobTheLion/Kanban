@@ -1,4 +1,4 @@
-package tasks;
+package ru.yandex.yakovlev.schedule.tasks;
 
 import java.util.Objects;
 

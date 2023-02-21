@@ -1,8 +1,8 @@
-package manager.CSVformater;
+package ru.yandex.yakovlev.schedule.manager.manager.CSVformater;
 
-import manager.CSVTaskFormat;
-import manager.HistoryManager;
-import manager.InMemoryHistoryManager;
+import ru.yandex.yakovlev.schedule.manager.CSVTaskFormat;
+import ru.yandex.yakovlev.schedule.manager.HistoryManager;
+import ru.yandex.yakovlev.schedule.manager.InMemoryHistoryManager;
 import org.junit.jupiter.api.Test;
 import ru.yandex.yakovlev.schedule.tasks.*;
 

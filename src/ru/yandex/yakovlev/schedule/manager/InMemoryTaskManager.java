@@ -203,7 +203,6 @@ public class InMemoryTaskManager implements TaskManager {
             SubTask oldSubTask = subTasks.get(updatedSubTask.getId());
             subTasks.put(updatedSubTask.getId(), updatedSubTask);
             Epic epicOfUpdatedSub = epicTasks.get(updatedSubTask.getEpicId()); //достаем нужный эпик
-            epicOfUpdatedSub.addSubTaskId(updatedSubTask.getId()); //кладем в него обновленный саб
             prioritizedTasks.remove(oldSubTask);
             scheduleManager.updateBooking(oldSubTask, updatedSubTask);
             prioritizedTasks.add(updatedSubTask);

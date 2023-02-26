@@ -127,6 +127,15 @@ public class HttpTaskServer {
                 case DELETE_ALL_SUBTASKS:
                     deleteAllSubTasks(exchange);
                     break;
+                case DELETE_TASK_BY_ID:
+                    deleteTaskById(exchange);
+                    break;
+                case DELETE_SUBTASK_BY_ID:
+                    deleteSubTaskById(exchange);
+                    break;
+                case DELETE_EPIC_BY_ID:
+                    deleteEpicById(exchange);
+                    break;
                 case ENDPOINT_UNKNOWN:
                     sendText(exchange, "Такого эндпоинта не существует", 404);
                     break;
@@ -235,8 +244,16 @@ public class HttpTaskServer {
                 Task task = gson.fromJson(body, Task.class);
                 if (task.getId() == 0) {
                     int id = taskManager.createTask(task);
+                    if (id == -1) {
+                        sendText(exchange, "Не удалось создать задачу. Слот занят.", 400);
+                        return;
+                    }
                     sendText(exchange, "Задача успешно создана. ID " + id, 201);
                 } else {
+                    if (taskManager.getTaskById(task.getId()) == null) {
+                        sendText(exchange, "Невозможно обновить задачу неверный ID", 404);
+                        return;
+                    }
                     taskManager.updateTask(task);
                     sendText(exchange, "Задача успешно обновлена.", 201);
                 }
@@ -253,6 +270,10 @@ public class HttpTaskServer {
                     int id = taskManager.createEpic(epic);
                     sendText(exchange, "Эпик успешно создан. ID " + id, 201);
                 } else {
+                    if (taskManager.getEpicById(epic.getId()) == null) {
+                        sendText(exchange, "Невозможно обновить эпик неверный ID", 404);
+                        return;
+                    }
                     taskManager.updateEpic(epic);
                     sendText(exchange, "Эпик успешно обновлен.", 201);
                 }
@@ -267,8 +288,16 @@ public class HttpTaskServer {
                 SubTask subTask = gson.fromJson(body, SubTask.class);
                 if (subTask.getId() == 0) {
                     int id = taskManager.createSubTask(subTask);
+                    if (id == -1) {
+                        sendText(exchange, "Не удалось создать сабтаск. Слот занят.", 400);
+                        return;
+                    }
                     sendText(exchange, "Сабтаск успешно создан. ID " + id, 201);
                 } else {
+                    if (taskManager.getSubTaskById(subTask.getId()) == null) {
+                        sendText(exchange, "Невозможно обновить сабтаск неверный ID", 404);
+                        return;
+                    }
                     taskManager.updateSubtask(subTask);
                     sendText(exchange, "Сабтаск успешно обновлен.", 201);
                 }
@@ -290,6 +319,39 @@ public class HttpTaskServer {
         public void deleteAllSubTasks(HttpExchange exchange) throws IOException {
             taskManager.getAllSubTasks();
             sendText(exchange, "Все сабтаски успешно удалены", 201);
+        }
+
+        public void deleteTaskById(HttpExchange exchange) throws IOException {
+            Optional<Integer> idOpt = getTaskId(exchange);
+            if (idOpt.isEmpty()) {
+                sendText(exchange,"Неверный ID", 400);
+                return;
+            }
+            int id = idOpt.get();
+            taskManager.deleteTaskById(id);
+            sendText(exchange, "Задача с ID " + id + " удалена.", 201);
+        }
+
+        public void deleteSubTaskById(HttpExchange exchange) throws IOException {
+            Optional<Integer> idOpt = getTaskId(exchange);
+            if (idOpt.isEmpty()) {
+                sendText(exchange,"Неверный ID", 400);
+                return;
+            }
+            int id = idOpt.get();
+            taskManager.deleteSubTaskById(id);
+            sendText(exchange, "Сабтаск с ID " + id + " удален.", 201);
+        }
+
+        public void deleteEpicById(HttpExchange exchange) throws IOException {
+            Optional<Integer> idOpt = getTaskId(exchange);
+            if (idOpt.isEmpty()) {
+                sendText(exchange,"Неверный ID", 400);
+                return;
+            }
+            int id = idOpt.get();
+            taskManager.deleteEpicById(id);
+            sendText(exchange, "Эпик с ID " + id + " удален.", 201);
         }
 
         private Optional<Integer> getTaskId(HttpExchange exchange) {
@@ -354,10 +416,6 @@ public class HttpTaskServer {
                     break;
             }
             return Endpoint.ENDPOINT_UNKNOWN;
-        }
-
-        private String readText(HttpExchange h) throws IOException {
-            return new String(h.getRequestBody().readAllBytes(), UTF_8);
         }
 
         private void sendText(HttpExchange exchange, String text, int code) throws IOException {

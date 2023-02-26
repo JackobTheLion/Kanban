@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class SubTask extends Task {
     private int epicId; // id эпика, к которому принадлежит subtask
-    private static final TaskType type = TaskType.SUBTASK;
+    private TaskType type = TaskType.SUBTASK;
 
     public SubTask(String name, String description, int idOfEpic, Status status) {
         super(name, description, status);

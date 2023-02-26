@@ -25,17 +25,17 @@ public class InMemoryTaskManager implements TaskManager {
     protected int generatorId = 0;
 
     @Override
-    public ArrayList<Task> getAllTasks() {
+    public List<Task> getAllTasks() {
         return new ArrayList<>(tasks.values());
     }
 
     @Override
-    public ArrayList<Epic> getAllEpicTasks() {
+    public List<Epic> getAllEpicTasks() {
         return new ArrayList<>(epicTasks.values());
     }
 
     @Override
-    public ArrayList<SubTask> getAllSubTasks() {
+    public List<SubTask> getAllSubTasks() {
         return new ArrayList<>(subTasks.values());
     }
 
@@ -300,7 +300,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     public List<Task> getPrioritizedTasks() {
-        return new ArrayList<Task>(prioritizedTasks);
+        return new ArrayList<>(prioritizedTasks);
     }
 
     protected void updateEpic(int epicId) {

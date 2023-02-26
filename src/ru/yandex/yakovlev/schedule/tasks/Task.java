@@ -9,7 +9,7 @@ public class Task {
     protected String description;
     protected int id;
     protected Status status;
-    private static final TaskType type = TaskType.TASK;
+    private TaskType type = TaskType.TASK;
     protected LocalDateTime startTime;
     protected Duration duration = Duration.ofMinutes(0); //продолжительность в минутах
     protected LocalDateTime endTime;

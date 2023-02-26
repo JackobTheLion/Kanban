@@ -1,16 +1,22 @@
 package ru.yandex.yakovlev.schedule;
 
+import ru.yandex.yakovlev.schedule.KVServer.HttpTaskServer;
 import ru.yandex.yakovlev.schedule.manager.Managers;
 import ru.yandex.yakovlev.schedule.manager.TaskManager;
 import ru.yandex.yakovlev.schedule.tasks.*;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.time.LocalDateTime;
+
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, URISyntaxException {
 
-        TaskManager inMemoryTaskManager = Managers.getDefault();
+       /* TaskManager inMemoryTaskManager = Managers.getDefault();
 
- /*       inMemoryTaskManager.createTask(new Task("Вынести мусор", "по пути в магазин вынести мусор"));
+        inMemoryTaskManager.createTask(new Task("Вынести мусор", "по пути в магазин вынести мусор"));
         inMemoryTaskManager.createTask(new Task("Помыть чашку", "Помыть чашку после кофе"));
 
         inMemoryTaskManager.createEpic(new Epic("Написать проект по ТЗ 3", "написать код по ТЗ"));
@@ -66,7 +72,7 @@ public class Main {
         inMemoryTaskManager.deleteEpicById(6);
         System.out.println(inMemoryTaskManager.getAllTasks());
         System.out.println(inMemoryTaskManager.getAllEpicTasks());
-        System.out.println("____________");*/
+        System.out.println("____________");
 
         System.out.println("Проверим историю. Должно быть пусто");
         System.out.println(inMemoryTaskManager.getHistory());
@@ -115,7 +121,25 @@ public class Main {
 
         System.out.println("Удалим эпик с ID 3 и проверим историю (должны удалиться в т.ч. его подзадачи)");
         inMemoryTaskManager.deleteEpicById(3);
-        System.out.println(inMemoryTaskManager.getHistory());
+        System.out.println(inMemoryTaskManager.getHistory());*/
 
+        HttpTaskServer httpTaskServer = new HttpTaskServer();
+        httpTaskServer.start();
+
+        Task task1 = new Task("задача 1","описание 1", Status.NEW);
+        task1.setStartTime(LocalDateTime.of(2023,3,15,8, 0));
+        task1.setDuration(60);
+        httpTaskServer.taskManager.createTask(task1);
+
+        Task task2 = new Task("задача 2","описание 2", Status.NEW);
+        task2.setStartTime(LocalDateTime.of(2023,4,15,8, 0));
+        task2.setDuration(60);
+        httpTaskServer.taskManager.createTask(task2);
+
+        Epic epic  = new Epic("Эпик 1", "Описание эпика 1", Status.NEW);
+        int epicId = httpTaskServer.taskManager.createEpic(epic);
+
+        SubTask subTask = new SubTask("Сабтаск 1", "Описание сабтаска 1", epicId, Status.NEW );
+        httpTaskServer.taskManager.createSubTask(subTask);
     }
 }

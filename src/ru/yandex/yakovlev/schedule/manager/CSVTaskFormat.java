@@ -81,11 +81,11 @@ public class CSVTaskFormat {
 
     public static String taskToString(Task task) { //id,type,name,status,description,epic
         return task.getId() + ","
-                + task.getType() + ","
+                + task.getTaskType() + ","
                 + task.getName() + ","
                 + task.getStatus() + ","
                 + task.getDescription() + ","
-                + (task.getType().equals(TaskType.SUBTASK) ? ((SubTask) task).getEpicId() + "," : "null,")
+                + (task.getTaskType().equals(TaskType.SUBTASK) ? ((SubTask) task).getEpicId() + "," : "null,")
                 + (task.getStartTime() == null ? "null," : task.getStartTime() + ",")
                 + (task.getDuration() == null ? "null" : task.getDuration().toMinutes());
         //getEpicId() есть только у сабтаска, поэтому явное приведение

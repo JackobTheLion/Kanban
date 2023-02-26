@@ -2,16 +2,14 @@ package ru.yandex.yakovlev.schedule.KVServer;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
-import ru.yandex.yakovlev.schedule.adapter.DurationConverter;
-import ru.yandex.yakovlev.schedule.adapter.LocalDateTimeConverter;
+import ru.yandex.yakovlev.schedule.adapter.*;
 import ru.yandex.yakovlev.schedule.manager.Managers;
 import ru.yandex.yakovlev.schedule.manager.TaskManager;
-import ru.yandex.yakovlev.schedule.tasks.Epic;
-import ru.yandex.yakovlev.schedule.tasks.SubTask;
-import ru.yandex.yakovlev.schedule.tasks.Task;
+import ru.yandex.yakovlev.schedule.tasks.*;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -24,6 +22,31 @@ import java.util.regex.Pattern;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class HttpTaskServer {
+
+    public static void main(String[] args) throws IOException {
+        HttpTaskServer httpTaskServer = new HttpTaskServer();
+        httpTaskServer.start();
+
+        Task task1 = new Task("задача 1","описание 1", Status.NEW);
+        task1.setStartTime(LocalDateTime.of(2023,3,15,8, 0));
+        task1.setDuration(60);
+        httpTaskServer.taskManager.createTask(task1);
+
+        Task task2 = new Task("задача 2","описание 2", Status.NEW);
+        task2.setStartTime(LocalDateTime.of(2023,4,15,8, 0));
+        task2.setDuration(60);
+        httpTaskServer.taskManager.createTask(task2);
+
+        Task task3 = new Task("задача 2","описание 2", Status.NEW);
+        httpTaskServer.taskManager.createTask(task3);
+
+        Epic epic  = new Epic("Эпик 1", "Описание эпика 1", Status.NEW);
+        int epicId = httpTaskServer.taskManager.createEpic(epic);
+
+        SubTask subTask = new SubTask("Сабтаск 1", "Описание сабтаска 1", epicId, Status.NEW );
+        httpTaskServer.taskManager.createSubTask(subTask);
+    }
+
     private final int PORT = 8000;
     private HttpServer httpServer;
     public TaskManager taskManager;
@@ -71,6 +94,39 @@ public class HttpTaskServer {
                 case GET_TASK_BY_ID:
                     getTaskByID(exchange);
                     break;
+                case GET_SUBTASK_BY_ID:
+                    getSubTaskByID(exchange);
+                    break;
+                case GET_EPIC_BY_ID:
+                    getEpicById(exchange);
+                    break;
+                case GET_HISTORY:
+                    getHistory(exchange);
+                    break;
+                case GET_PRIORITIZED:
+                    getPrioritized(exchange);
+                    break;
+                case GET_SUBS_OF_EPIC:
+                    getSubsOfEpic(exchange);
+                    break;
+                case POST_TASK:
+                    postTask(exchange);
+                    break;
+                case POST_EPIC:
+                    postEpic(exchange);
+                    break;
+                case POST_SUBTASK:
+                    postSubTask(exchange);
+                    break;
+                case DELETE_ALL_TASKS:
+                    deleteAllTasks(exchange);
+                    break;
+                case DELETE_ALL_EPICS:
+                    deleteAllEpics(exchange);
+                    break;
+                case DELETE_ALL_SUBTASKS:
+                    deleteAllSubTasks(exchange);
+                    break;
                 case ENDPOINT_UNKNOWN:
                     sendText(exchange, "Такого эндпоинта не существует", 404);
                     break;
@@ -79,32 +135,161 @@ public class HttpTaskServer {
 
         private void getAllTasks(HttpExchange exchange) throws IOException {
             List<Task> tasks = taskManager.getAllTasks();
-            String tasksJson = gson.toJson(tasks);
-            sendText(exchange,tasksJson, 200);
+            sendText(exchange,gson.toJson(tasks), 200);
         }
 
         private void getAllSubTasks(HttpExchange exchange) throws IOException {
             List<SubTask> subTasks = taskManager.getAllSubTasks();
-            String subTasksJson = gson.toJson(subTasks);
-            sendText(exchange,subTasksJson, 200);
+            sendText(exchange,gson.toJson(subTasks), 200);
         }
 
         private void getAllEpics(HttpExchange exchange) throws IOException {
             List<Epic> epics = taskManager.getAllEpicTasks();
-            String epicJson = gson.toJson(epics);
-            sendText(exchange,epicJson, 200);
+            sendText(exchange,gson.toJson(epics), 200);
         }
 
         private void getTaskByID(HttpExchange exchange) throws IOException {
             Optional<Integer> idOpt = getTaskId(exchange);
             if (idOpt.isEmpty()) {
                 sendText(exchange,"Неверный ID", 400);
+                return;
             }
 
             int id  = idOpt.get();
             Task task = taskManager.getTaskById(id);
-            String taskJson = gson.toJson(task);
-            sendText(exchange, taskJson, 200);
+            if (task == null) {
+                sendText(exchange, "Таска с ID " + id + " не существует", 404);
+                return;
+            }
+            sendText(exchange, gson.toJson(task), 200);
+        }
+
+        private void getSubTaskByID(HttpExchange exchange) throws IOException {
+            Optional<Integer> idOpt = getTaskId(exchange);
+            if (idOpt.isEmpty()) {
+                sendText(exchange,"Неверный ID", 400);
+                return;
+            }
+
+            int id  = idOpt.get();
+            SubTask subTask = taskManager.getSubTaskById(id);
+            if (subTask == null) {
+                sendText(exchange, "Сабтаска с ID " + id + " не существует", 404);
+                return;
+            }
+            sendText(exchange, gson.toJson(subTask), 200);
+        }
+
+        private void getEpicById(HttpExchange exchange) throws IOException {
+            Optional<Integer> idOpt = getTaskId(exchange);
+            if (idOpt.isEmpty()) {
+                sendText(exchange,"Неверный ID", 400);
+                return;
+            }
+
+            int id  = idOpt.get();
+            Epic epic = taskManager.getEpicById(id);
+            if (epic == null) {
+                sendText(exchange, "Эпика с ID " + id + " не существует", 404);
+                return;
+            }
+            sendText(exchange, gson.toJson(epic), 200);
+        }
+
+        private void getHistory(HttpExchange exchange) throws IOException {
+            List<Task> history = taskManager.getHistory();
+            if (history.isEmpty()) {
+                sendText(exchange, "История пуста", 200);
+                return;
+            }
+            sendText(exchange, gson.toJson(history), 200);
+        }
+
+        public void getPrioritized(HttpExchange exchange) throws IOException {
+            List<Task> prioritized = taskManager.getPrioritizedTasks();
+            if (prioritized.isEmpty()) {
+                sendText(exchange, "Не создано ни одной задачи", 200);
+                return;
+            }
+            sendText(exchange, gson.toJson(prioritized), 200);
+        }
+
+        public void getSubsOfEpic(HttpExchange exchange) throws IOException {
+            Optional<Integer> idOpt = getTaskId(exchange);
+            if (idOpt.isEmpty()) {
+                sendText(exchange,"Неверный ID", 400);
+                return;
+            }
+            int id = idOpt.get();
+            List<SubTask> subTasks = taskManager.getSubTasksByEpicId(id);
+            if (subTasks == null) {
+                sendText(exchange,"Эпика с ID " + id + " не существует", 404);
+                return;
+            }
+            sendText(exchange, gson.toJson(subTasks), 200);
+        }
+
+        public void postTask(HttpExchange exchange) throws IOException {
+            String body = new String(exchange.getRequestBody().readAllBytes());
+            try {
+                Task task = gson.fromJson(body, Task.class);
+                if (task.getId() == 0) {
+                    int id = taskManager.createTask(task);
+                    sendText(exchange, "Задача успешно создана. ID " + id, 201);
+                } else {
+                    taskManager.updateTask(task);
+                    sendText(exchange, "Задача успешно обновлена.", 201);
+                }
+            } catch (JsonSyntaxException e) {
+                sendText(exchange, "Получен некорректный JSON", 400);
+            }
+        }
+
+        public void postEpic(HttpExchange exchange) throws IOException {
+            String body = new String(exchange.getRequestBody().readAllBytes());
+            try {
+                Epic epic = gson.fromJson(body, Epic.class);
+                if (epic.getId() == 0) {
+                    int id = taskManager.createEpic(epic);
+                    sendText(exchange, "Эпик успешно создан. ID " + id, 201);
+                } else {
+                    taskManager.updateEpic(epic);
+                    sendText(exchange, "Эпик успешно обновлен.", 201);
+                }
+            } catch (JsonSyntaxException e) {
+                sendText(exchange, "Получен некорректный JSON", 400);
+            }
+        }
+
+        public void postSubTask(HttpExchange exchange) throws IOException {
+            String body = new String(exchange.getRequestBody().readAllBytes());
+            try {
+                SubTask subTask = gson.fromJson(body, SubTask.class);
+                if (subTask.getId() == 0) {
+                    int id = taskManager.createSubTask(subTask);
+                    sendText(exchange, "Сабтаск успешно создан. ID " + id, 201);
+                } else {
+                    taskManager.updateSubtask(subTask);
+                    sendText(exchange, "Сабтаск успешно обновлен.", 201);
+                }
+            } catch (JsonSyntaxException e) {
+                sendText(exchange, "Получен некорректный JSON", 400);
+            }
+        }
+
+        public void deleteAllTasks(HttpExchange exchange) throws IOException {
+            taskManager.getAllTasks();
+            sendText(exchange, "Все задачи успешно удалены", 201);
+        }
+
+        public void deleteAllEpics(HttpExchange exchange) throws IOException {
+            taskManager.getAllEpicTasks();
+            sendText(exchange, "Все эпики успешно удалены", 201);
+        }
+
+        public void deleteAllSubTasks(HttpExchange exchange) throws IOException {
+            taskManager.getAllSubTasks();
+            sendText(exchange, "Все сабтаски успешно удалены", 201);
         }
 
         private Optional<Integer> getTaskId(HttpExchange exchange) {
@@ -121,48 +306,52 @@ public class HttpTaskServer {
             String path = exchange.getRequestURI().getPath();
             String query = exchange.getRequestURI().getQuery();
 
-            if (method.equals("GET")) {
-                if (Pattern.matches("^/tasks/$", path)) {
-                    return Endpoint.GET_PRIORITIZED;
-                } else if (Pattern.matches("^/tasks/task/", path) && query == null) {
-                    return Endpoint.GET_TASKS;
-                } else if (Pattern.matches("^/tasks/subtask/", path) && query == null) {
-                    return Endpoint.GET_SUBTASKS;
-                } else if (Pattern.matches("^/tasks/epic/", path) && query == null) {
-                    return Endpoint.GET_EPICS;
-                } else if (Pattern.matches("^/tasks/task/", path)) {
-                    return Endpoint.GET_TASK_BY_ID;
-                } else if (Pattern.matches("^/tasks/subtask/", path)) {
-                    return Endpoint.GET_SUBTASK_BY_ID;
-                } else if (Pattern.matches("^/tasks/epic/", path)) {
-                    return Endpoint.GET_EPIC_BY_ID;
-                } else if (Pattern.matches("^/tasks/history/", path)) {
-                    return Endpoint.GET_HISTORY;
-                } else if (Pattern.matches("^/tasks/subtasks/epic/", path)) {
-                    return Endpoint.GET_SUBS_OF_EPIC;
-                }
-            } else if (method.equals("POST")) {
-                if (Pattern.matches("^/tasks/task/", path)) {
-                    return Endpoint.POST_TASK;
-                } else if (Pattern.matches("^/tasks/subtask/", path)) {
-                    return Endpoint.POST_SUBTASK;
-                } else if (Pattern.matches("^/tasks/epic/", path)) {
-                    return Endpoint.POST_EPIC;
-                }
-            } else if (method.equals("DELETE")) {
-                if (Pattern.matches("^/tasks/task/", path) && query == null) {
-                    return Endpoint.DELETE_ALL_TASKS;
-                } else if (Pattern.matches("^/tasks/subtask/", path) && query == null) {
-                    return Endpoint.DELETE_ALL_SUBTASKS;
-                } else if (Pattern.matches("^/tasks/epic/", path) && query == null) {
-                    return Endpoint.DELETE_ALL_EPICS;
-                } else if (Pattern.matches("^/tasks/task/", path)) {
-                    return Endpoint.DELETE_TASK_BY_ID;
-                } else if (Pattern.matches("^/tasks/subtask/", path)) {
-                    return Endpoint.DELETE_SUBTASK_BY_ID;
-                } else if (Pattern.matches("^/tasks/epic/", path)) {
-                    return Endpoint.DELETE_EPIC_BY_ID;
-                }
+            switch (method) {
+                case "GET":
+                    if (Pattern.matches("^/tasks/$", path)) {
+                        return Endpoint.GET_PRIORITIZED;
+                    } else if (Pattern.matches("^/tasks/task/", path) && query == null) { 
+                        return Endpoint.GET_TASKS;
+                    } else if (Pattern.matches("^/tasks/subtask/", path) && query == null) {
+                        return Endpoint.GET_SUBTASKS;
+                    } else if (Pattern.matches("^/tasks/epic/", path) && query == null) {
+                        return Endpoint.GET_EPICS;
+                    } else if (Pattern.matches("^/tasks/task/", path)) {
+                        return Endpoint.GET_TASK_BY_ID;
+                    } else if (Pattern.matches("^/tasks/subtask/", path)) {
+                        return Endpoint.GET_SUBTASK_BY_ID;
+                    } else if (Pattern.matches("^/tasks/epic/", path)) {
+                        return Endpoint.GET_EPIC_BY_ID;
+                    } else if (Pattern.matches("^/tasks/history/", path)) {
+                        return Endpoint.GET_HISTORY;
+                    } else if (Pattern.matches("^/tasks/subtask/epic/", path)) {
+                        return Endpoint.GET_SUBS_OF_EPIC;
+                    }
+                    break;
+                case "POST":
+                    if (Pattern.matches("^/tasks/task/", path)) {
+                        return Endpoint.POST_TASK;
+                    } else if (Pattern.matches("^/tasks/subtask/", path)) {
+                        return Endpoint.POST_SUBTASK;
+                    } else if (Pattern.matches("^/tasks/epic/", path)) {
+                        return Endpoint.POST_EPIC;
+                    }
+                    break;
+                case "DELETE":
+                    if (Pattern.matches("^/tasks/task/", path) && query == null) {
+                        return Endpoint.DELETE_ALL_TASKS;
+                    } else if (Pattern.matches("^/tasks/subtask/", path) && query == null) {
+                        return Endpoint.DELETE_ALL_SUBTASKS;
+                    } else if (Pattern.matches("^/tasks/epic/", path) && query == null) {
+                        return Endpoint.DELETE_ALL_EPICS;
+                    } else if (Pattern.matches("^/tasks/task/", path)) {
+                        return Endpoint.DELETE_TASK_BY_ID;
+                    } else if (Pattern.matches("^/tasks/subtask/", path)) {
+                        return Endpoint.DELETE_SUBTASK_BY_ID;
+                    } else if (Pattern.matches("^/tasks/epic/", path)) {
+                        return Endpoint.DELETE_EPIC_BY_ID;
+                    }
+                    break;
             }
             return Endpoint.ENDPOINT_UNKNOWN;
         }

@@ -214,7 +214,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public ArrayList<SubTask> getSubTasksByEpicId(int id) {
+    public List<SubTask> getSubTasksByEpicId(int id) {
         if (epicTasks.containsKey(id)) {
             ArrayList<SubTask> subTasksByEpicId = new ArrayList<>();
             ArrayList<Integer> subTasksOfEpic = epicTasks.get(id).getSubTasksOfEpic();

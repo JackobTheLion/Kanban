@@ -7,20 +7,15 @@ import java.util.Objects;
 public class Epic extends Task {
 
     private ArrayList<Integer> subTasksOfEpic = new ArrayList<>(); // список подзадач эпика ID -> subTask
-    private TaskType type = TaskType.EPIC;
 
     public Epic(String name, String description, Status status) {
         super(name, description, status);
+        this.taskType = TaskType.EPIC;
     }
 
     public ArrayList<Integer> getSubTasksOfEpic() {
         return subTasksOfEpic;
     }
-
-    @Override
-    public TaskType getType() {
-        return type;
-    } //без переопределения всегда возвращается значение TASK в CSVTaskFormat.taskFromString(), не понимаю почему
 
     public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;

@@ -9,7 +9,7 @@ public class Task {
     protected String description;
     protected int id;
     protected Status status;
-    private TaskType type = TaskType.TASK;
+    protected TaskType taskType;
     protected LocalDateTime startTime;
     protected Duration duration = Duration.ofMinutes(0); //продолжительность в минутах
     protected LocalDateTime endTime;
@@ -18,6 +18,7 @@ public class Task {
         this.name = name;
         this.description = description;
         this.status = status;
+        this.taskType = TaskType.TASK;
     }
 
     public void setId(int id) {
@@ -56,8 +57,8 @@ public class Task {
         this.description = description;
     }
 
-    public TaskType getType() {
-        return type;
+    public TaskType getTaskType() {
+        return this.taskType;
     }
 
     public Duration getDuration() {

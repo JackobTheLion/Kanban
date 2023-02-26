@@ -123,23 +123,6 @@ public class Main {
         inMemoryTaskManager.deleteEpicById(3);
         System.out.println(inMemoryTaskManager.getHistory());*/
 
-        HttpTaskServer httpTaskServer = new HttpTaskServer();
-        httpTaskServer.start();
 
-        Task task1 = new Task("задача 1","описание 1", Status.NEW);
-        task1.setStartTime(LocalDateTime.of(2023,3,15,8, 0));
-        task1.setDuration(60);
-        httpTaskServer.taskManager.createTask(task1);
-
-        Task task2 = new Task("задача 2","описание 2", Status.NEW);
-        task2.setStartTime(LocalDateTime.of(2023,4,15,8, 0));
-        task2.setDuration(60);
-        httpTaskServer.taskManager.createTask(task2);
-
-        Epic epic  = new Epic("Эпик 1", "Описание эпика 1", Status.NEW);
-        int epicId = httpTaskServer.taskManager.createEpic(epic);
-
-        SubTask subTask = new SubTask("Сабтаск 1", "Описание сабтаска 1", epicId, Status.NEW );
-        httpTaskServer.taskManager.createSubTask(subTask);
     }
 }

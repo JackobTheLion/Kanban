@@ -4,11 +4,11 @@ import java.util.Objects;
 
 public class SubTask extends Task {
     private int epicId; // id эпика, к которому принадлежит subtask
-    private TaskType type = TaskType.SUBTASK;
 
     public SubTask(String name, String description, int idOfEpic, Status status) {
         super(name, description, status);
         this.epicId = idOfEpic;
+        this.taskType = TaskType.SUBTASK;
     }
 
     public int getEpicId() {
@@ -18,11 +18,6 @@ public class SubTask extends Task {
     public void setEpicId(int epicId) {
         this.epicId = epicId;
     }
-
-    @Override
-    public TaskType getType() {
-        return type;
-    } //без переопределения всегда возвращается значение TASK в CSVTaskFormat.taskFromString(), не понимаю почему
 
     @Override
     public String toString() {

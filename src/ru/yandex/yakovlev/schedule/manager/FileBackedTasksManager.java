@@ -267,7 +267,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
     protected void addAnyTask(Task task) { //метод для добавления таска в нужную мапу
         final int id = task.getId();
-        switch (task.getType()) { //проверяем какой тип задачи
+        switch (task.getTaskType()) { //проверяем какой тип задачи
             case SUBTASK:
                 subTasks.put(id, (SubTask) task); //при необходимости приводим к нужному типу
                 prioritizedTasks.add(task);

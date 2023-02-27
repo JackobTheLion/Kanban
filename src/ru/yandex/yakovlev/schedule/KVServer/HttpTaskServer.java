@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-public class HttpTaskServer {
+    public class HttpTaskServer {
 
     public static void main(String[] args) throws IOException {
         HttpTaskServer httpTaskServer = new HttpTaskServer();
@@ -51,7 +51,7 @@ public class HttpTaskServer {
     private HttpServer httpServer;
     public TaskManager taskManager;
 
-    private Gson gson = new GsonBuilder()
+    private final Gson gson = new GsonBuilder()
             .serializeNulls()
             .setPrettyPrinting()
             .registerTypeAdapter(LocalDateTime .class, new LocalDateTimeConverter())

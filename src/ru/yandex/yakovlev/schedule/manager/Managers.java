@@ -14,8 +14,6 @@ public class Managers {
     }
 
     public static ScheduleManager getDefaultScheduleManager() {
-        return new ScheduleManager(LocalDateTime.of(2023, 02, 15, 12,0));
+        return new ScheduleManager(LocalDateTime.of(2023, 2, 15, 12,0));
     }
-
-
 }

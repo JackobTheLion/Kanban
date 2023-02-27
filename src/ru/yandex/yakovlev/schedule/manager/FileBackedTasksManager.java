@@ -4,6 +4,8 @@ import ru.yandex.yakovlev.schedule.manager.exceptions.ManagerSaveException;
 import ru.yandex.yakovlev.schedule.tasks.*;
 
 import java.io.*;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.time.LocalDateTime;
@@ -127,10 +129,11 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         System.out.println(fileBackedTasksManager.getPrioritizedTasks());
     }
 
-    private final File file;
+    String path = "";
+    private final File file = new File(path);
 
     public FileBackedTasksManager(String path) {
-        this.file = new File(path);
+        this.path = path;
     }
 
     @Override

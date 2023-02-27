@@ -1,4 +1,4 @@
-package ru.yandex.yakovlev.schedule.adapter;
+package ru.yandex.yakovlev.schedule.KVServer.adapter;
 
 /*
  * Copyright 2014 Greg Kopff

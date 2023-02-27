@@ -1,2 +1,4 @@
-package ru.yandex.yakovlev.schedule.KVServer;public class KVClient {
+package ru.yandex.yakovlev.schedule.KVServer;
+
+public class KVClient {
 }

@@ -33,7 +33,7 @@ public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksM
             throw new ManagerSaveException("Can't save to file: " + file.getName() + " at "
                     + file.getPath(), e);
         }
-        taskManager = new FileBackedTasksManager(file);
+        taskManager = new FileBackedTasksManager(file.getPath());
     }
 
     @Test

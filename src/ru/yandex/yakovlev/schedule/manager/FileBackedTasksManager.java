@@ -129,8 +129,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
     private final File file;
 
-    public FileBackedTasksManager(File file) {
-        this.file = file;
+    public FileBackedTasksManager(String path) {
+        this.file = new File(path);
     }
 
     @Override
@@ -227,7 +227,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     public static FileBackedTasksManager loadFromFile(File file) {
-        final FileBackedTasksManager taskManager = new FileBackedTasksManager(file); //создаем менеджер из файла
+        final FileBackedTasksManager taskManager = new FileBackedTasksManager(file.getPath()); //создаем менеджер из файла
         try { //пробуем
             final String csv = Files.readString(file.toPath()); //считываем стригу из файла
             final String[] lines = csv.split(System.lineSeparator()); //разделяем ее по разделителю строк

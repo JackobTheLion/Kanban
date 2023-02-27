@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 public class Managers {
 
     public static TaskManager getDefault() {
-        return new FileBackedTasksManager(new File("resources/backup.csv"));
+        return new FileBackedTasksManager("resources/backup.csv");
     }
 
     public static HistoryManager getDefaultHistory() {

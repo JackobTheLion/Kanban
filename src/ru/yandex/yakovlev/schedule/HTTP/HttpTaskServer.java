@@ -1,4 +1,4 @@
-package ru.yandex.yakovlev.schedule.KVServer;
+package ru.yandex.yakovlev.schedule.HTTP;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -8,7 +8,7 @@ import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import ru.yandex.yakovlev.schedule.manager.Managers;
 import ru.yandex.yakovlev.schedule.manager.TaskManager;
-import ru.yandex.yakovlev.schedule.KVServer.adapter.*;
+import ru.yandex.yakovlev.schedule.HTTP.adapter.*;
 import ru.yandex.yakovlev.schedule.tasks.*;
 
 import java.io.IOException;

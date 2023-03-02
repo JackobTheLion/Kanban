@@ -1,4 +1,4 @@
-package ru.yandex.yakovlev.schedule.KVServer;
+package ru.yandex.yakovlev.schedule.HTTP;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 

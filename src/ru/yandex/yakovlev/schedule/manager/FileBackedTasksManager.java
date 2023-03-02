@@ -129,7 +129,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         System.out.println(fileBackedTasksManager.getPrioritizedTasks());
     }
 
-    String path = "";
+    protected String path = "";
     private final File file = new File(path);
 
     public FileBackedTasksManager(String path) {
@@ -299,7 +299,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         return epicTasks.get(id); //если выше были null, значит ID принадлежит сабтаску, достаем и возвращаем
     }
 
-    private void save() {
+    protected void save() {
         StringBuilder saved = new StringBuilder();
         saved.append(getHeader()).append(System.lineSeparator());
         for (Task task : tasks.values()) {

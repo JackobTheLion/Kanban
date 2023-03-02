@@ -10,10 +10,8 @@ import java.net.http.HttpResponse;
 public class KVClient {
 
     String KVServerUrl;
-    public String API_TOKEN = "";
+    String API_TOKEN = "";
     HttpClient client = HttpClient.newHttpClient();
-
-    HttpResponse.BodyHandler<String> handler = HttpResponse.BodyHandlers.ofString();
 
     public KVClient(String KVServerUrl) throws URISyntaxException, IOException, InterruptedException {
         this.KVServerUrl = KVServerUrl;
@@ -21,6 +19,7 @@ public class KVClient {
     }
 
     public void registerAtKVServer() throws URISyntaxException, IOException, InterruptedException {
+
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
                 .uri(new URI(KVServerUrl + "/register"))
@@ -28,18 +27,17 @@ public class KVClient {
                 .header("Accept", "text/html")
                 .build();
 
-        HttpResponse<String> response = client.send(request, handler);
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
         API_TOKEN = response.body();
     }
 
     public void saveAtKVServer(String key, String body) {
+
         try {
             HttpRequest request = HttpRequest.newBuilder()
                     .POST(HttpRequest.BodyPublishers.ofString(body))
                     .uri(new URI(KVServerUrl + "/save/" + key + "?API_TOKEN=" + API_TOKEN))
-                    .version(HttpClient.Version.HTTP_1_1)
-                    .header("Accept", "text/html")
                     .build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -52,15 +50,14 @@ public class KVClient {
     }
 
     public String loadFromServer(String key) {
+
         try {
             HttpRequest request = HttpRequest.newBuilder()
-                    .GET()
                     .uri(new URI(KVServerUrl + "/load/" + key + "?API_TOKEN=" + API_TOKEN))
+                    .GET()
                     .build();
+
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            if (response.statusCode() == 200) {
-                System.out.println("Good");
-            }
             return response.body();
 
         } catch (URISyntaxException | IOException | InterruptedException e) {
@@ -68,5 +65,9 @@ public class KVClient {
             System.out.println(e.getStackTrace());
             return null;
         }
+    }
+
+    public void setAPI_TOKEN_DEBUG() {
+        this.API_TOKEN = "DEBUG";
     }
 }

@@ -130,7 +130,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     protected String path = "";
-    private final File file = new File(path);
 
     public FileBackedTasksManager(String path) {
         this.path = path;
@@ -200,9 +199,9 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             return -1;
         }
 
-        super.createTask(task);
+        int id = super.createTask(task);
         save();
-        return task.getId();
+        return id;
     }
 
     @Override
@@ -300,6 +299,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     protected void save() {
+        File file = new File(path);
         StringBuilder saved = new StringBuilder();
         saved.append(getHeader()).append(System.lineSeparator());
         for (Task task : tasks.values()) {

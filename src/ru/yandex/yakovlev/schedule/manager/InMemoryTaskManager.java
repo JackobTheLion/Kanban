@@ -302,6 +302,17 @@ public class InMemoryTaskManager implements TaskManager {
         return new ArrayList<>(prioritizedTasks);
     }
 
+    @Override
+    public boolean doesTaskExist(int id) {
+        if (tasks.containsKey(id)) {
+            return true;
+        } else if (subTasks.containsKey(id)) {
+            return true;
+        } else if (epicTasks.containsKey(id)) {
+            return true;
+        } return false;
+    }
+
     protected void updateEpic(int epicId) {
         updateStatusOfEpic(epicId);
         updateEpicDuration(epicId);

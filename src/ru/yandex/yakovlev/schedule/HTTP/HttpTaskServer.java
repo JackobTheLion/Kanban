@@ -49,7 +49,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
     private final int PORT = 8000;
     private HttpServer httpServer;
-    public TaskManager taskManager;
+    private final TaskManager taskManager;
 
     private final Gson gson = new GsonBuilder()
             .serializeNulls()
@@ -74,6 +74,9 @@ import static java.nio.charset.StandardCharsets.UTF_8;
     public void stop() {
         httpServer.stop(0);
         System.out.println("Остановили сервер на порту " + PORT);
+    }
+    public TaskManager getTaskManager() {
+        return taskManager;
     }
 
     private class taskHandler implements HttpHandler {
@@ -141,6 +144,8 @@ import static java.nio.charset.StandardCharsets.UTF_8;
                     break;
             }
         }
+
+
 
         private void getAllTasks(HttpExchange exchange) throws IOException {
             List<Task> tasks = taskManager.getAllTasks();
@@ -214,7 +219,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
             sendText(exchange, gson.toJson(history), 200);
         }
 
-        public void getPrioritized(HttpExchange exchange) throws IOException {
+        private void getPrioritized(HttpExchange exchange) throws IOException {
             List<Task> prioritized = taskManager.getPrioritizedTasks();
             if (prioritized.isEmpty()) {
                 sendText(exchange, "Не создано ни одной задачи", 200);
@@ -223,7 +228,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
             sendText(exchange, gson.toJson(prioritized), 200);
         }
 
-        public void getSubsOfEpic(HttpExchange exchange) throws IOException {
+        private void getSubsOfEpic(HttpExchange exchange) throws IOException {
             Optional<Integer> idOpt = getTaskId(exchange);
             if (idOpt.isEmpty()) {
                 sendText(exchange,"Неверный ID", 400);
@@ -238,7 +243,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
             sendText(exchange, gson.toJson(subTasks), 200);
         }
 
-        public void postTask(HttpExchange exchange) throws IOException {
+        private void postTask(HttpExchange exchange) throws IOException {
             String body = new String(exchange.getRequestBody().readAllBytes());
             try {
                 Task task = gson.fromJson(body, Task.class);
@@ -262,7 +267,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
             }
         }
 
-        public void postEpic(HttpExchange exchange) throws IOException {
+        private void postEpic(HttpExchange exchange) throws IOException {
             String body = new String(exchange.getRequestBody().readAllBytes());
             try {
                 Epic epic = gson.fromJson(body, Epic.class);
@@ -282,7 +287,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
             }
         }
 
-        public void postSubTask(HttpExchange exchange) throws IOException {
+        private void postSubTask(HttpExchange exchange) throws IOException {
             String body = new String(exchange.getRequestBody().readAllBytes());
             try {
                 SubTask subTask = gson.fromJson(body, SubTask.class);
@@ -306,50 +311,62 @@ import static java.nio.charset.StandardCharsets.UTF_8;
             }
         }
 
-        public void deleteAllTasks(HttpExchange exchange) throws IOException {
-            taskManager.getAllTasks();
+        private void deleteAllTasks(HttpExchange exchange) throws IOException {
+            taskManager.clearTasks();
             sendText(exchange, "Все задачи успешно удалены", 201);
         }
 
-        public void deleteAllEpics(HttpExchange exchange) throws IOException {
-            taskManager.getAllEpicTasks();
+        private void deleteAllEpics(HttpExchange exchange) throws IOException {
+            taskManager.clearEpics();
             sendText(exchange, "Все эпики успешно удалены", 201);
         }
 
-        public void deleteAllSubTasks(HttpExchange exchange) throws IOException {
-            taskManager.getAllSubTasks();
+        private void deleteAllSubTasks(HttpExchange exchange) throws IOException {
+            taskManager.clearSubTasks();
             sendText(exchange, "Все сабтаски успешно удалены", 201);
         }
 
-        public void deleteTaskById(HttpExchange exchange) throws IOException {
+        private void deleteTaskById(HttpExchange exchange) throws IOException {
             Optional<Integer> idOpt = getTaskId(exchange);
             if (idOpt.isEmpty()) {
                 sendText(exchange,"Неверный ID", 400);
                 return;
             }
             int id = idOpt.get();
+            if (!getTaskManager().doesTaskExist(id)) {
+                sendText(exchange,"Задача с ID " + id + " не существует.", 404);
+                return;
+            }
             taskManager.deleteTaskById(id);
             sendText(exchange, "Задача с ID " + id + " удалена.", 201);
         }
 
-        public void deleteSubTaskById(HttpExchange exchange) throws IOException {
+        private void deleteSubTaskById(HttpExchange exchange) throws IOException {
             Optional<Integer> idOpt = getTaskId(exchange);
             if (idOpt.isEmpty()) {
                 sendText(exchange,"Неверный ID", 400);
                 return;
             }
             int id = idOpt.get();
+            if (!getTaskManager().doesTaskExist(id)) {
+                sendText(exchange,"Сабтаск с ID " + id + " не существует.", 404);
+                return;
+            }
             taskManager.deleteSubTaskById(id);
             sendText(exchange, "Сабтаск с ID " + id + " удален.", 201);
         }
 
-        public void deleteEpicById(HttpExchange exchange) throws IOException {
+        private void deleteEpicById(HttpExchange exchange) throws IOException {
             Optional<Integer> idOpt = getTaskId(exchange);
             if (idOpt.isEmpty()) {
                 sendText(exchange,"Неверный ID", 400);
                 return;
             }
             int id = idOpt.get();
+            if (!getTaskManager().doesTaskExist(id)) {
+                sendText(exchange,"Эпик с ID " + id + " не существует.", 404);
+                return;
+            }
             taskManager.deleteEpicById(id);
             sendText(exchange, "Эпик с ID " + id + " удален.", 201);
         }
@@ -420,7 +437,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
         private void sendText(HttpExchange exchange, String text, int code) throws IOException {
             byte[] response = text.getBytes(UTF_8);
-            exchange.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
+            exchange.getResponseHeaders().add("Content-Type", "application/json");
             exchange.sendResponseHeaders(code, response.length);
             exchange.getResponseBody().write(response);
             exchange.close();

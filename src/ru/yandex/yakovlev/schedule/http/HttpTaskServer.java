@@ -1,4 +1,4 @@
-package ru.yandex.yakovlev.schedule.HTTP;
+package ru.yandex.yakovlev.schedule.http;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -8,11 +8,12 @@ import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import ru.yandex.yakovlev.schedule.manager.Managers;
 import ru.yandex.yakovlev.schedule.manager.TaskManager;
-import ru.yandex.yakovlev.schedule.HTTP.adapter.*;
+import ru.yandex.yakovlev.schedule.http.adapter.*;
 import ru.yandex.yakovlev.schedule.tasks.*;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.net.URISyntaxException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,7 +24,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
     public class HttpTaskServer {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, URISyntaxException, InterruptedException {
         HttpTaskServer httpTaskServer = new HttpTaskServer();
         httpTaskServer.start();
 
@@ -58,7 +59,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
             .registerTypeAdapter(Duration.class, new DurationConverter())
             .create();
 
-    public HttpTaskServer() {
+    public HttpTaskServer() throws URISyntaxException, IOException, InterruptedException {
         this.taskManager = Managers.getDefault();
     }
 

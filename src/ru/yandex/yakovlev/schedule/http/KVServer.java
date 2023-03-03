@@ -1,4 +1,4 @@
-package ru.yandex.yakovlev.schedule.HTTP;
+package ru.yandex.yakovlev.schedule.http;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -49,7 +49,8 @@ public class KVServer {
 					h.sendResponseHeaders(400, 0);
 					return;
 				}
-				sendText(h, value);
+				sendText(h, value); //h.sendResponseHeaders(200, 0) в методе sendText();
+				System.out.println("Значение для ключа " + key + " успешно отправлено в ответ на запрос!");
 			} else {
 				System.out.println("/load ждёт GET-запрос, а получил: " + h.getRequestMethod());
 				h.sendResponseHeaders(405, 0);

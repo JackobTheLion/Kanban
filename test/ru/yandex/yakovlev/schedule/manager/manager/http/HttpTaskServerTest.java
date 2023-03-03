@@ -1,19 +1,21 @@
-package ru.yandex.yakovlev.schedule.manager.manager.HTTP;
+package ru.yandex.yakovlev.schedule.manager.manager.http;
 
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.yandex.yakovlev.schedule.HTTP.HttpTaskServer;
-import ru.yandex.yakovlev.schedule.HTTP.adapter.DurationConverter;
-import ru.yandex.yakovlev.schedule.HTTP.adapter.LocalDateTimeConverter;
+import ru.yandex.yakovlev.schedule.http.HttpTaskServer;
+import ru.yandex.yakovlev.schedule.http.KVServer;
+import ru.yandex.yakovlev.schedule.http.adapter.DurationConverter;
+import ru.yandex.yakovlev.schedule.http.adapter.LocalDateTimeConverter;
 import ru.yandex.yakovlev.schedule.manager.TaskManager;
 import ru.yandex.yakovlev.schedule.tasks.*;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -27,6 +29,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class HttpTaskServerTest {
 
     HttpTaskServer httpTaskServer;
+    KVServer kvServer;
     Task task;
     SubTask subTask;
     SubTask subTask2;
@@ -47,7 +50,9 @@ public class HttpTaskServerTest {
 
 
     @BeforeEach
-    public void beforeEach() throws IOException {
+    public void beforeEach() throws IOException, URISyntaxException, InterruptedException {
+        kvServer = new KVServer();
+        kvServer.start();
         httpTaskServer = new HttpTaskServer();
         httpClient = HttpClient.newHttpClient();
         httpTaskServer.start();
@@ -57,6 +62,7 @@ public class HttpTaskServerTest {
     @AfterEach
     public void afterEach() {
         httpTaskServer.stop();
+        kvServer.stop();
     }
 
     public void initTasks() {

@@ -1,8 +1,8 @@
 package ru.yandex.yakovlev.schedule;
 
-import ru.yandex.yakovlev.schedule.HTTP.HttpTaskManager;
-import ru.yandex.yakovlev.schedule.HTTP.HttpTaskServer;
-import ru.yandex.yakovlev.schedule.HTTP.KVServer;
+import ru.yandex.yakovlev.schedule.http.HttpTaskManager;
+import ru.yandex.yakovlev.schedule.http.HttpTaskServer;
+import ru.yandex.yakovlev.schedule.http.KVServer;
 import ru.yandex.yakovlev.schedule.tasks.*;
 
 import java.io.IOException;
@@ -19,8 +19,8 @@ public class Main {
         HttpTaskServer httpTaskServer = new HttpTaskServer();
         httpTaskServer.start();
 
-        HttpTaskManager taskManager = new HttpTaskManager("http://localhost:8078");
-        taskManager.kvClient.setAPI_TOKEN_DEBUG();
+        HttpTaskManager taskManager = new HttpTaskManager("http://localhost:", KVServer.PORT);
+        taskManager.setApiTokenDebug();
 
         System.out.println("Создадим задачи...");
         Task task1 = new Task("задача 1","описание 1", Status.NEW);
@@ -85,8 +85,8 @@ public class Main {
         taskManager.getTaskById(task1.getId());
         System.out.println(taskManager.getHistory());
 
-        HttpTaskManager taskManager2 = new HttpTaskManager("http://localhost:8078");
-        taskManager2.kvClient.setAPI_TOKEN_DEBUG();
+        HttpTaskManager taskManager2 = new HttpTaskManager("http://localhost:", KVServer.PORT);
+        taskManager2.setApiTokenDebug();
         taskManager2.load();
 
         System.out.println("____________");
@@ -99,8 +99,8 @@ public class Main {
         System.out.println(taskManager2.getHistory());
         System.out.println("____________");
 
-        System.out.println("Проверим в ru.yandex.yakovlev.schedule.tasks.")   ;
-        System.out.println("ru.yandex.yakovlev.schedule.tasks одинаковые?");
+        System.out.println("Проверим в tasks.")   ;
+        System.out.println("tasks одинаковые?");
         System.out.println(taskManager.getAllTasks().equals(taskManager2.getAllTasks()));
         System.out.println("____________");
 

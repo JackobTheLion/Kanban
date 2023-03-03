@@ -1,9 +1,8 @@
-package ru.yandex.yakovlev.schedule.HTTP;
+package ru.yandex.yakovlev.schedule.http;
 
 import com.google.gson.*;
-import com.google.gson.reflect.TypeToken;
-import ru.yandex.yakovlev.schedule.HTTP.adapter.DurationConverter;
-import ru.yandex.yakovlev.schedule.HTTP.adapter.LocalDateTimeConverter;
+import ru.yandex.yakovlev.schedule.http.adapter.DurationConverter;
+import ru.yandex.yakovlev.schedule.http.adapter.LocalDateTimeConverter;
 import ru.yandex.yakovlev.schedule.manager.CSVTaskFormat;
 import ru.yandex.yakovlev.schedule.manager.FileBackedTasksManager;
 import ru.yandex.yakovlev.schedule.tasks.Epic;
@@ -11,7 +10,6 @@ import ru.yandex.yakovlev.schedule.tasks.SubTask;
 import ru.yandex.yakovlev.schedule.tasks.Task;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.net.URISyntaxException;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -20,18 +18,17 @@ import java.util.List;
 
 public class HttpTaskManager extends FileBackedTasksManager {
 
-    Gson gson = new GsonBuilder()
+    private final Gson gson = new GsonBuilder()
             .serializeNulls()
             .setPrettyPrinting()
             .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeConverter())
             .registerTypeAdapter(Duration.class, new DurationConverter())
             .create();
-    public KVClient kvClient;
-    Type taskListType = new TypeToken<List<Task>>() {}.getType();
+    private final KVClient kvClient;
 
-    public HttpTaskManager(String path) throws URISyntaxException, IOException, InterruptedException {
+    public HttpTaskManager(String path, int port) throws URISyntaxException, IOException, InterruptedException {
         super(path);
-        kvClient = new KVClient(path);
+        kvClient = new KVClient(port);
     }
 
     @Override
@@ -40,14 +37,13 @@ public class HttpTaskManager extends FileBackedTasksManager {
         allTasks.addAll(getAllSubTasks());
         allTasks.addAll(getAllEpicTasks());
         String allTasksJson = gson.toJson(allTasks);
-        kvClient.saveAtKVServer("tasks", allTasksJson);
+        kvClient.put("tasks", allTasksJson);
 
-        kvClient.saveAtKVServer("history", CSVTaskFormat.historyToString(inMemoryHistoryManager));
-
+        kvClient.put("history", CSVTaskFormat.historyToString(inMemoryHistoryManager));
     }
 
     public void load() {
-        String tasksJson = kvClient.loadFromServer("tasks");
+        String tasksJson = kvClient.load("tasks");
         if (tasksJson == null) {
             System.out.println("Ошибка получения списка задач с сервера");
         } else {
@@ -76,7 +72,7 @@ public class HttpTaskManager extends FileBackedTasksManager {
             }
         }
 
-        String historyString = kvClient.loadFromServer("history");
+        String historyString = kvClient.load("history");
         if (historyString == null) {
             System.out.println("Ошибка получения истории с сервера");
         } else {
@@ -85,5 +81,9 @@ public class HttpTaskManager extends FileBackedTasksManager {
                 inMemoryHistoryManager.add(findTask(taskId));
             }
         }
+    }
+
+    public void setApiTokenDebug() {
+        kvClient.setApiTokenDebug();
     }
 }

@@ -1,7 +1,7 @@
 id,type,name,status,description,epic,startTime,duration
-1,TASK,задача 1,NEW,описание 1,null,2023-03-15T08:00,60
-2,TASK,задача 2,NEW,описание 2,null,2023-04-15T08:00,60
-3,TASK,задача 2,NEW,описание 2,null,null,0
-4,EPIC,Эпик 1,NEW,Описание эпика 1,null,null,0
-5,SUBTASK,Сабтаск 1,NEW,Описание сабтаска 1,4,null,0
+1,TASK,Test addNewTask,NEW,Test addNewTask description,null,2023-03-15T08:00,60
+2,EPIC,Name,NEW,Description,null,2023-04-15T08:00,120
+3,SUBTASK,Test addNewTask,NEW,Test addNewTask description,2,2023-04-15T08:00,60
+4,SUBTASK,Test addNewTask,NEW,Test addNewTask description,2,2023-05-15T08:00,60
 
+2

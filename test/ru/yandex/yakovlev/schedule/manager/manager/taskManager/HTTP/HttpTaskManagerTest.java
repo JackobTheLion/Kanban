@@ -3,9 +3,9 @@ package ru.yandex.yakovlev.schedule.manager.manager.taskManager.HTTP;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.yandex.yakovlev.schedule.HTTP.HttpTaskManager;
-import ru.yandex.yakovlev.schedule.HTTP.HttpTaskServer;
-import ru.yandex.yakovlev.schedule.HTTP.KVServer;
+import ru.yandex.yakovlev.schedule.http.HttpTaskManager;
+import ru.yandex.yakovlev.schedule.http.HttpTaskServer;
+import ru.yandex.yakovlev.schedule.http.KVServer;
 import ru.yandex.yakovlev.schedule.manager.manager.taskManager.TaskManagerTest;
 import ru.yandex.yakovlev.schedule.tasks.*;
 
@@ -28,7 +28,7 @@ public class HttpTaskManagerTest extends TaskManagerTest<HttpTaskManager> {
         httpTaskServer = new HttpTaskServer();
         httpTaskServer.start();
 
-        taskManager = new HttpTaskManager("http://localhost:8078");
+        taskManager = new HttpTaskManager("http://localhost:", KVServer.PORT);
     }
 
     @AfterEach
@@ -40,7 +40,7 @@ public class HttpTaskManagerTest extends TaskManagerTest<HttpTaskManager> {
     @Test
     public void saveAndLoadTest() {
         try {
-            taskManager.kvClient.setAPI_TOKEN_DEBUG();
+            taskManager.setApiTokenDebug();
 
             Task task1 = new Task("задача 1","описание 1", Status.NEW);
             task1.setStartTime(LocalDateTime.of(2023,3,15,8, 0));
@@ -73,8 +73,8 @@ public class HttpTaskManagerTest extends TaskManagerTest<HttpTaskManager> {
             taskManager.getEpicById(epic1.getId());
             taskManager.getTaskById(task1.getId());
 
-            HttpTaskManager taskManager2 = new HttpTaskManager("http://localhost:8078");
-            taskManager2.kvClient.setAPI_TOKEN_DEBUG();
+            HttpTaskManager taskManager2 = new HttpTaskManager("http://localhost:", 8078);
+            taskManager2.setApiTokenDebug();
             taskManager2.load();
 
             List<Task> expectedTasks = taskManager.getAllTasks();

@@ -1,12 +1,17 @@
 package ru.yandex.yakovlev.schedule.manager;
 
+import ru.yandex.yakovlev.schedule.http.HttpTaskManager;
+import ru.yandex.yakovlev.schedule.http.KVServer;
+
 import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 
 public class Managers {
 
-    public static TaskManager getDefault() {
-        return new FileBackedTasksManager("resources/backup.csv");
+    public static TaskManager getDefault() throws URISyntaxException, IOException, InterruptedException {
+        return new HttpTaskManager("http://localhost:", KVServer.PORT);
     }
 
     public static HistoryManager getDefaultHistory() {
@@ -16,4 +21,5 @@ public class Managers {
     public static ScheduleManager getDefaultScheduleManager() {
         return new ScheduleManager(LocalDateTime.of(2023, 2, 15, 12,0));
     }
+
 }

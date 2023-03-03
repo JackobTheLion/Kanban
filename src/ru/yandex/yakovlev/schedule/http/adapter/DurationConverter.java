@@ -1,4 +1,4 @@
-package ru.yandex.yakovlev.schedule.HTTP.adapter;
+package ru.yandex.yakovlev.schedule.http.adapter;
 
 /*
  * Copyright 2022 Greg Kopff
